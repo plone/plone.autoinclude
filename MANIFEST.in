@@ -1,0 +1,3 @@
+graft src/plone
+include *.rst LICENSE.GPL
+global-exclude *.pyc
