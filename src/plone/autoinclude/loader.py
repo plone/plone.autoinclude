@@ -12,8 +12,8 @@ import os
 logger = logging.getLogger(__name__)
 
 
-# Set of project names that we have already imported.
-_known_project_names = set()
+# Dictionary of project names and packages that we have already imported.
+_known_project_names = {}
 
 
 def load_packages(target=""):
@@ -25,22 +25,30 @@ def load_packages(target=""):
 
     After running the function, the packages have been imported.
 
-    This returns a set of package names.
+    This returns a dictionary of package names and packages.
     """
-    dists = set()
+    dists = {}
     for ep in iter_entry_points(group="z3c.autoinclude.plugin"):
         if target and ep.module_name != target:
             continue
         project_name = ep.dist.project_name
-        if project_name.startswith("plone"):
-            # It takes quite a while to import all these packages.
-            logger.info(f"Ignoring {project_name} for now.")
-            continue
+        # if project_name.startswith("plone"):
+        #     # It takes quite a while to import all these packages.
+        #     logger.info(f"Ignoring {project_name} for now.")
+        #     continue
         if project_name not in _known_project_names:
-            # TODO: catch ModuleNotFoundError.  But for now I want to see this error.
-            importlib.import_module(project_name)
-        dists.add(project_name)
-    _known_project_names.union(dists)
+            try:
+                dist = importlib.import_module(project_name)
+            except ModuleNotFoundError:
+                # Note: this may happen a lot, at least for z3c.autoinclude,
+                # because the project name may not be the same as the package/module.
+                logger.exception(f"Could not import {project_name}.")
+                _known_project_names[project_name] = None
+                continue
+            _known_project_names[project_name] = dist
+        dist = _known_project_names[project_name]
+        if dist is not None:
+            dists[project_name] = dist
     return dists
 
 
@@ -51,29 +59,31 @@ def get_zcml_file(project_name, zcml="configure.zcml"):
     return filename
 
 
-def load_zcml_file(context, project_name, zcml="configure.zcml", override=False):
+def load_zcml_file(
+    context, project_name, package, zcml="configure.zcml", override=False
+):
     filename = get_zcml_file(project_name, zcml)
     if not filename:
         return
     if override:
         logger.info(f"Loading {project_name}:{filename} in override mode.")
-        # We could pass a package or a dotted name as third argument,
-        # but that seems not needed because we have an absolute file name.
-        includeOverrides(context, filename)
+        # The package as third argument seems not needed because we have an absolute file name.
+        # But it *is* needed when that file loads other relative files.
+        includeOverrides(context, filename, package)
     else:
         logger.info(f"Loading {project_name}:{filename}.")
-        include(context, filename)
+        include(context, filename, package)
 
 
-def load_configure(context, filename, dotted_names):
+def load_configure(context, filename, dists):
     logger.info(f"Loading {filename} files.")
-    for project_name in dotted_names:
-        logger.info(project_name)
-        load_zcml_file(context, project_name, filename)
+    for project_name, package in dists.items():
+        logger.debug(project_name)
+        load_zcml_file(context, project_name, package, filename)
 
 
-def load_overrides(context, filename, dotted_names):
+def load_overrides(context, filename, dists):
     logger.info(f"Loading {filename} files in override mode.")
-    for project_name in dotted_names:
-        logger.info(project_name)
-        load_zcml_file(context, project_name, "overrides.zcml", override=True)
+    for project_name, package in dists.items():
+        logger.debug(project_name)
+        load_zcml_file(context, project_name, package, "overrides.zcml", override=True)

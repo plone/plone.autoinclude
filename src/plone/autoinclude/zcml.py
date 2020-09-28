@@ -45,10 +45,10 @@ def includePluginsDirective(context, target, file=None):
     else:
         zcml_to_look_for = [file]
 
-    dotted_names = loader.load_packages(target)
+    dists = loader.load_packages(target)
 
     for filename in zcml_to_look_for:
-        loader.load_configure(context, filename, dotted_names)
+        loader.load_configure(context, filename, dists)
 
 
 def includePluginsOverridesDirective(context, target, file=None):
@@ -64,7 +64,7 @@ def includePluginsOverridesDirective(context, target, file=None):
         zcml_to_look_for = ["overrides.zcml"]
     else:
         zcml_to_look_for = [file]
-    dotted_names = loader.load_packages(target)
+    dists = loader.load_packages(target)
 
     for filename in zcml_to_look_for:
-        loader.load_configure(context, filename, dotted_names)
+        loader.load_configure(context, filename, dists)
