@@ -53,6 +53,22 @@ Install plone.autoinclude by adding it to your buildout::
 
 and then running ``bin/buildout``
 
+For core Plone my intention would be to do this:
+
+- In ``Products.CMFPlone/meta.zcml`` set::
+
+    <include package="plone.autoinclude" file="meta.zcml" />
+    <autoIncludePlugins target="plone" file="meta.zcml" />
+
+- In ``Products.CMFPlone/configure.zcml`` set::
+
+    <autoIncludePlugins target="plone" file="configure.zcml" />
+
+- In ``Products.CMFPlone/overrides.zcml`` set::
+
+    <autoIncludePluginsOverrides target="plone" file="overrides.zcml" />
+
+
 
 Contribute
 ----------

@@ -5,12 +5,12 @@
   <meta:directives namespace="http://namespaces.zope.org/zope">
 
     <meta:directive
-        name="includePlugins"
+        name="autoIncludePlugins"
         schema=".zcml.IIncludePluginsDirective"
         handler=".zcml.includePluginsDirective"
         />
     <meta:directive
-        name="includePluginsOverrides"
+        name="autoIncludePluginsOverrides"
         schema=".zcml.IIncludePluginsDirective"
         handler=".zcml.includePluginsOverridesDirective"
         />

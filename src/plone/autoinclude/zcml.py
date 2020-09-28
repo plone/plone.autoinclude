@@ -16,18 +16,16 @@ logger = logging.getLogger(__name__)
 class IIncludePluginsDirective(Interface):
     """Auto-include any ZCML in the dependencies of this package."""
 
-    package = NativeStringLine(
-        title=u"Package to auto-include for",
-        description=u"""
-        Auto-include all plugins to this package.
-        """,
+    target = NativeStringLine(
+        title="Package to auto-include for",
+        description="Auto-include all plugins to this package.",
         # Note: z3c.autoinclude has required=True
         required=False,
     )
 
     file = NativeStringLine(
-        title=u"ZCML filename to look for",
-        description=u"""
+        title="ZCML filename to look for",
+        description="""
         Name of a particular ZCML file to look for.
         If omitted, autoinclude will scan for standard filenames
         (e.g. meta.zcml, configure.zcml, overrides.zcml)
@@ -36,7 +34,7 @@ class IIncludePluginsDirective(Interface):
     )
 
 
-def includePluginsDirective(context, package, file=None):
+def includePluginsDirective(context, target, file=None):
 
     # if api.plugins_disabled():
     #     log.warn(
@@ -51,13 +49,13 @@ def includePluginsDirective(context, package, file=None):
         zcml_to_look_for = [file]
 
     # TODO: get list of packages back?
-    loader.load_packages(package)
+    loader.load_packages(target)
 
     for filename in zcml_to_look_for:
         loader.load_configure(context, filename)
 
 
-def includePluginsOverridesDirective(context, package, file=None):
+def includePluginsOverridesDirective(context, target, file=None):
 
     # if api.plugins_disabled():
     #     log.warn(
@@ -70,7 +68,7 @@ def includePluginsOverridesDirective(context, package, file=None):
         zcml_to_look_for = ["overrides.zcml"]
     else:
         zcml_to_look_for = [file]
-    loader.load_packages(package)
+    loader.load_packages(target)
 
     for filename in zcml_to_look_for:
         loader.load_configure(context, filename)
