@@ -6,8 +6,8 @@ from setuptools import setup
 
 
 setup(
-    name='plone.autoinclude',
-    version='1.0.0a1',
+    name="plone.autoinclude",
+    version="1.0.0a1",
     description="Auto include code and zcml",
     # long_description: see metadata in setup.cfg
     # Get more from https://pypi.org/classifiers/
@@ -25,26 +25,24 @@ setup(
         "Operating System :: OS Independent",
         "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     ],
-    keywords='Python Plone CMS',
-    author='Maurits van Rees',
-    author_email='maurits@vanrees.org',
-    url='https://github.com/collective/plone.autoinclude',
+    keywords="Python Plone CMS",
+    author="Maurits van Rees",
+    author_email="maurits@vanrees.org",
+    url="https://github.com/collective/plone.autoinclude",
     project_urls={
-        'PyPI': 'https://pypi.org/project/plone.autoinclude/',
-        'Source': 'https://github.com/plone/plone.autoinclude',
-        'Tracker': 'https://github.com/plone/plone.autoinclude/issues',
+        "PyPI": "https://pypi.org/project/plone.autoinclude/",
+        "Source": "https://github.com/plone/plone.autoinclude",
+        "Tracker": "https://github.com/plone/plone.autoinclude/issues",
         # 'Documentation': 'https://plone.autoinclude.readthedocs.io/en/latest/',
     },
-    license='GPL version 2',
-    packages=find_packages('src', exclude=['ez_setup']),
-    namespace_packages=['plone'],
-    package_dir={'': 'src'},
+    license="GPL version 2",
+    packages=find_packages("src", exclude=["ez_setup"]),
+    namespace_packages=["plone"],
+    package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
     python_requires="~=3.6",
-    install_requires=[
-        'setuptools',
-    ],
+    install_requires=["setuptools",],
     extras_require={
         # 'test': [
         #     # Maybe
