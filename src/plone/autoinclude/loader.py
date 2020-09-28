@@ -24,19 +24,29 @@ def new_configuration_context(package):
     return context
 
 
-# Get entry points.
-# For now only the z3c.autoinclude ones.
-# Use this to import the Python code, if possible.
+# Dictionary with distributions/module.
+# Key is project name, value is imported module.
+# I'm not yet sure if we need the module.
 _dists = {}
-for ep in iter_entry_points(group="z3c.autoinclude.plugin"):
-    project_name = ep.dist.project_name
-    if project_name.startswith("plone"):
-        logger.info("Ignoring {project_name} for now.")
-        continue
-    # TODO: catch ModuleNotFoundError
-    _dists[project_name] = importlib.import_module(project_name)
 
-pprint(list(_dists.items()))
+
+def load_packages():
+    """Load packages from the autoinclude entry points.
+
+    For now we only get the z3c.autoinclude entry points,
+    for backwards compatibility.
+    I want entry points of our own as well.
+
+    After running the function, the packages have been imported.
+    """
+    for ep in iter_entry_points(group="z3c.autoinclude.plugin"):
+        project_name = ep.dist.project_name
+        if project_name.startswith("plone"):
+            # It takes quite a while to import all these packages.
+            logger.info("Ignoring {project_name} for now.")
+            continue
+        # TODO: catch ModuleNotFoundError.  But for now I want to see this error.
+        _dists[project_name] = importlib.import_module(project_name)
 
 
 def get_zcml_file(project_name, zcml="configure.zcml"):
@@ -53,15 +63,37 @@ def load_zcml_file(project_name, zcml="configure.zcml", override=False, context=
     global _dists
     package = _dists[project_name]
     if context is None:
+        # XXX This does not really work for me.  Sample error:
+        # zope.configuration.exceptions.ConfigurationError:
+        # ('Unknown directive', 'http://namespaces.zope.org/i18n', 'registerTranslations')
         context = new_configuration_context(package)
     if override:
+        logger.info("Loading {project_name}:{filename} in override mode.")
         includeOverrides(context, filename, package)
     else:
+        logger.info("Loading {project_name}:{filename}.")
         include(context, filename, package)
 
 
-for project_name, module in _dists.items():
-    logger.info(project_name)
-    meta = load_zcml_file(project_name, "meta.zcml")
-    configure = load_zcml_file(project_name, "configure.zcml")
-    overrides = load_zcml_file(project_name, "overrides.zcml")
+def load_meta():
+    logger.info("Loading meta .zcml files.")
+    global _dists
+    for project_name, module in _dists.items():
+        logger.info(project_name)
+        meta = load_zcml_file(project_name, "meta.zcml")
+
+
+def load_configure():
+    logger.info("Loading configure.zcml files.")
+    global _dists
+    for project_name, module in _dists.items():
+        logger.info(project_name)
+        configure = load_zcml_file(project_name, "configure.zcml")
+
+
+def load_overrides():
+    logger.info("Loading overrides.zcml files.")
+    global _dists
+    for project_name, module in _dists.items():
+        logger.info(project_name)
+        overrides = load_zcml_file(project_name, "overrides.zcml", override=True)
