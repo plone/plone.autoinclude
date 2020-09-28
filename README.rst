@@ -48,7 +48,7 @@ Install plone.autoinclude by adding it to your buildout::
     eggs =
         plone.autoinclude
     zcml =
-        plone.autoinclude
+        plone.autoinclude-meta
 
 
 and then running ``bin/buildout``
