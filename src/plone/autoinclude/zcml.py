@@ -1,8 +1,5 @@
 from . import loader
 from zope.interface import Interface
-from zope.configuration.xmlconfig import include, includeOverrides
-from zope.configuration.fields import GlobalObject
-from zope.dottedname.resolve import resolve
 from zope.schema import NativeStringLine
 
 # from z3c.autoinclude import api
