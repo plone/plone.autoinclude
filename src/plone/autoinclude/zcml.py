@@ -16,8 +16,7 @@ logger = logging.getLogger(__name__)
 class IIncludePluginsDirective(Interface):
     """Auto-include any ZCML in the dependencies of this package."""
 
-    # TODO: maybe make package a NativeStringLine
-    package = GlobalObject(
+    package = NativeStringLine(
         title=u"Package to auto-include for",
         description=u"""
         Auto-include all plugins to this package.
@@ -45,7 +44,6 @@ def includePluginsDirective(context, package, file=None):
     #         % _context.info
     #     )
     #     return
-    dotted_name = package.__name__
 
     if file is None:
         zcml_to_look_for = ["meta.zcml", "configure.zcml"]
@@ -53,7 +51,7 @@ def includePluginsDirective(context, package, file=None):
         zcml_to_look_for = [file]
 
     # TODO: get list of packages back?
-    loader.load_packages(dotted_name)
+    loader.load_packages(package)
 
     for filename in zcml_to_look_for:
         loader.load_configure(context, filename)
@@ -68,12 +66,11 @@ def includePluginsOverridesDirective(context, package, file=None):
     #     )
     #     return
 
-    dotted_name = package.__name__
     if file is None:
         zcml_to_look_for = ["overrides.zcml"]
     else:
         zcml_to_look_for = [file]
-    loader.load_packages(dotted_name)
+    loader.load_packages(package)
 
     for filename in zcml_to_look_for:
         loader.load_configure(context, filename)
