@@ -33,7 +33,7 @@ Tell me what your product does
 Features
 --------
 
-- Can be bullet points
+- See https://github.com/plone/Products.CMFPlone/issues/3053
 
 
 Installation
