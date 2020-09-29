@@ -29,7 +29,11 @@ def load_packages(target=""):
     """
     dists = {}
     for ep in iter_entry_points(group="z3c.autoinclude.plugin"):
-        if target and ep.module_name != target:
+        # If we look for target 'plone' then only consider entry points
+        # that are registered for this target (module name).
+        # But if the entry point is not registered for a specific target,
+        # we can include it.
+        if target and ep.module_name and ep.module_name != target:
             continue
         project_name = ep.dist.project_name
         # if project_name.startswith("plone"):
