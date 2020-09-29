@@ -70,12 +70,12 @@ def load_zcml_file(
     if not filename:
         return
     if override:
-        logger.info(f"Loading {project_name}:{filename} in override mode.")
+        logger.info(f"Loading {project_name}:{zcml} from {filename} in override mode.")
         # The package as third argument seems not needed because we have an absolute file name.
         # But it *is* needed when that file loads other relative files.
         includeOverrides(context, filename, package)
     else:
-        logger.info(f"Loading {project_name}:{filename}.")
+        logger.info(f"Loading {project_name}:{zcml} from {filename}")
         include(context, filename, package)
 
 
