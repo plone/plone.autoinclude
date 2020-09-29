@@ -34,6 +34,17 @@ Features
 --------
 
 - See https://github.com/plone/Products.CMFPlone/issues/3053
+- An alternative to ``z3c.autoinclude``.
+- When a package registers an autoinclude entry point, we load its Python code at Zope/Plone startup.
+- And we load its zcml.
+- Works with Buildout-installed packages.
+- Works with pip-installed packages.
+
+
+Compatibility
+-------------
+
+This is made for Python 3.6+.
 
 
 Installation
