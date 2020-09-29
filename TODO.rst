@@ -9,7 +9,7 @@ for example only load ``configure.zcml`` and not ``overrides.zcml``.
 
 This very much needs tests.
 Certainly unit tests.
-We can get inspiration from z3c.autoinclude, see for example the sample packages that are in itstests directory.
+We can get inspiration from z3c.autoinclude, see for example the sample packages that are in its `tests directory <https://github.com/zopefoundation/z3c.autoinclude/tree/master/src/z3c/autoinclude/tests>`_.
 
 We should also create some Github Actions or similar to try a few common scenarios:
 
