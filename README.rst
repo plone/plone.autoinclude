@@ -68,6 +68,29 @@ For core Plone my intention would be to do this:
 
     <autoIncludePluginsOverrides target="plone" file="overrides.zcml" />
 
+See also the ``package-includes`` directory in this repository.
+
+
+Installation with pip
+---------------------
+
+Let's leave buildout completely out of the picture and only use pip::
+
+    # Create virtual environment in the current directory:
+    python3.8 -mvenv .
+    # Install Plone:
+    bin/pip install -c https://dist.plone.org/release/5.2.2/constraints.txt Products.CMFPlone
+    # Install plone.autoinclude from the current git checkout:
+    bin/pip install -e .
+    # When I try bin/mkwsgiinstance it complains that Paste is missing.
+    # We could use waitress instead, but let's try Paste for now:
+    bin/pip install -c https://dist.plone.org/release/5.2.2/constraints.txt Paste
+    # Create the Zope WSGI instance:
+    bin/mkwsgiinstance -d . -u admin:admin
+    # Copy our zcml that disables z3c.autoinclude and enables our own:
+    cp -a package-includes etc/
+    # Start Zope:
+    bin/runwsgi -v etc/zope.ini
 
 
 Contribute

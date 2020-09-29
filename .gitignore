@@ -9,8 +9,10 @@ bin/
 buildout-cache/
 develop-eggs/
 eggs/
+/etc/
 htmlcov/
 include/
+/inituser
 lib/
 local/
 node_modules/
