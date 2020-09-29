@@ -80,6 +80,7 @@ For core Plone my intention would be to do this:
     <autoIncludePluginsOverrides target="plone" file="overrides.zcml" />
 
 See also the ``package-includes`` directory in this repository.
+And see `CMFPlone branch plone-autoinclude <https://github.com/plone/Products.CMFPlone/tree/plone-autoinclude>`_, based on 5.2.x.
 
 
 Installation with pip
