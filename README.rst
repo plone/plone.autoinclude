@@ -91,12 +91,12 @@ Let's leave buildout completely out of the picture and only use pip::
     # Create virtual environment in the current directory:
     python3.8 -mvenv .
     # Install Plone:
-    bin/pip install -c https://dist.plone.org/release/5.2.2/constraints.txt Products.CMFPlone
+    bin/pip install -c https://dist.plone.org/release/5.2.3/constraints3.txt Products.CMFPlone
     # Install plone.autoinclude from the current git checkout:
     bin/pip install -e .
     # When I try bin/mkwsgiinstance it complains that Paste is missing.
     # We could use waitress instead, but let's try Paste for now:
-    bin/pip install -c https://dist.plone.org/release/5.2.2/constraints.txt Paste
+    bin/pip install -c https://dist.plone.org/release/5.2.3/constraints3.txt Paste
     # Create the Zope WSGI instance:
     bin/mkwsgiinstance -d . -u admin:admin
     # Copy our zcml that disables z3c.autoinclude and enables our own:
