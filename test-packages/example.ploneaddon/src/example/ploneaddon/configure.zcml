@@ -15,4 +15,6 @@
 
   <include file="permissions.zcml" />
 
+  <!-- FOR TESTS: This is configure.zcml from example.ploneaddon. -->
+
 </configure>

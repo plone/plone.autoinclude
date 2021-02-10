@@ -11,3 +11,6 @@ recursive-include src *.py
 recursive-include src *.rst
 recursive-include src *.txt
 recursive-include src *.zcml
+
+# Not sure if we want to include this, but it is needed if we want to run tests:
+graft test-packages
