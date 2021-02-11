@@ -4,6 +4,7 @@ import sys
 import pkg_resources
 from setuptools.command.egg_info import egg_info
 import distutils.core
+from .utils import get_configuration_context
 
 import unittest
 
@@ -54,23 +55,18 @@ class TestLoader(unittest.TestCase):
         filename = get_zcml_file("example.ploneaddon")
         self.assertIsNotNone(filename)
         with open(filename) as myfile:
-            self.assertIn("This is configure.zcml from example.ploneaddon.", myfile.read())
+            self.assertIn(
+                "This is configure.zcml from example.ploneaddon.", myfile.read()
+            )
         self.assertIsNone(get_zcml_file("example.ploneaddon", zcml="foo.zcml"))
 
     def test_load_zcml_file(self):
         from plone.autoinclude.loader import load_zcml_file
 
-        context = None  # TODO: proper context
-        self.assertIsNone(
-            load_zcml_file(context, "zope.configuration", "zope.configuration")
-        )
-        self.assertIsNone(
-            load_zcml_file(
-                context, "zope.configuration", "zope.configuration", zcml="foo.zcml"
-            )
-        )
-        self.assertIsNone(
-            load_zcml_file(
-                context, "zope.configuration", "zope.configuration", override=True
-            )
-        )
+        import zope.configuration as package
+
+        context = get_configuration_context(package)
+        project_name = "zope.configuration"
+        load_zcml_file(context, project_name, package)
+        load_zcml_file(context, project_name, package, zcml="foo.zcml")
+        load_zcml_file(context, project_name, package, "overrides.zcml", override=True)
