@@ -3,7 +3,12 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
-    i18n_domain="example.ploneaddon">
+    i18n_domain="example.ploneaddon"
+    xmlns:meta="http://namespaces.zope.org/meta">
+
+  <!-- In configure.zcml, meta:provides should not have an effect.
+       It might not be our responsibility to test this, but we can be curious. :-) -->
+  <meta:provides feature="illegal-feature" />
 
   <!--
     Be careful if you use general includeDependencies, it can have side effects!

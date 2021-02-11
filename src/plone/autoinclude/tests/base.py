@@ -20,6 +20,8 @@ class PackageTestCase:
     meta_files = ["meta.zcml"]
     configure_files = ["configure.zcml"]
     overrides_files = ["overrides.zcml"]
+    # Are any features provided when loading meta.zcml?
+    features = []
 
     def test_load_packages(self):
         from plone.autoinclude.loader import load_packages
@@ -74,6 +76,13 @@ class PackageTestCase:
             self.assertIn(context.path(filepath), context._seen_files)
         self.assertEqual(len(context._seen_files), len(self.meta_files))
 
+        # meta.zcml may have a meta:provides option.
+        for feature in self.features:
+            self.assertTrue(
+                context.hasFeature(feature), f"meta:provides feature {feature} missing"
+            )
+        self.assertEqual(len(context._features), len(self.features))
+
     def test_load_zcml_file_configure(self):
         from plone.autoinclude.loader import load_zcml_file
 
@@ -86,6 +95,12 @@ class PackageTestCase:
         for filepath in self.configure_files:
             self.assertIn(context.path(filepath), context._seen_files)
         self.assertEqual(len(context._seen_files), len(self.configure_files))
+
+        # Features from meta:provides should normally not be available
+        # when loading configure.zcml
+        for feature in self.features:
+            self.assertFalse(context.hasFeature(feature))
+        self.assertEqual(len(context._features), 0)
 
     def test_load_zcml_file_overrides(self):
         from plone.autoinclude.loader import load_zcml_file
