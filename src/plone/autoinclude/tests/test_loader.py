@@ -20,7 +20,9 @@ class TestLoader(unittest.TestCase):
         filename = get_zcml_file("example.ploneaddon")
         self.assertIsNotNone(filename)
         with open(filename) as myfile:
-            self.assertIn("This is configure.zcml from example.ploneaddon.", myfile.read())
+            self.assertIn(
+                "This is configure.zcml from example.ploneaddon.", myfile.read()
+            )
         self.assertIsNone(get_zcml_file("example.ploneaddon", zcml="foo.zcml"))
 
     def test_load_zcml_file(self):
