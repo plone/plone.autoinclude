@@ -61,11 +61,13 @@ def get_zcml_file(project_name, zcml="configure.zcml"):
 
 
 def load_zcml_file(
-    context, project_name, package, zcml="configure.zcml", override=False
+    context, project_name, package=None, zcml="configure.zcml", override=False
 ):
     filename = get_zcml_file(project_name, zcml)
     if not filename:
         return
+    if package is None and context.package is not None:
+        package = context.package
     if override:
         logger.info(f"Loading {project_name}:{zcml} from {filename} in override mode.")
         # The package as third argument seems not needed because we have an absolute file name.

@@ -17,6 +17,9 @@ class PackageTestCase:
     project_name = ""
     # Which files are included when we load meta.zcml, configure.zcml, overrides.zcml?
     # Make this empty in your test case when the package has no such zcml.
+    # When you add a test package, make sure to update test_integration_plone.py
+    # and maybe other integration tests as well: add the new package to
+    # meta_files, configure_files and overrides_files there.
     meta_files = ["meta.zcml"]
     configure_files = ["configure.zcml"]
     overrides_files = ["overrides.zcml"]
