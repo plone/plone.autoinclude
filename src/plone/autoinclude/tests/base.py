@@ -5,6 +5,8 @@ from importlib import import_module
 class PackageTestCase:
     """Test our interaction with a package.
 
+    You can find most packages in the test-packages directory in the repo.
+
     This is a base test class for all packages.
     You can inherit from this class and override the variables.
 

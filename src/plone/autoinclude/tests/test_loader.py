@@ -8,7 +8,9 @@ class TestLoader(unittest.TestCase):
         from plone.autoinclude.loader import load_packages
 
         packages = load_packages()
-        self.assertEqual(sorted(packages.keys()), ["example.ploneaddon"])
+        self.assertEqual(
+            sorted(packages.keys()), ["example.metaoverrides", "example.ploneaddon"]
+        )
         package = packages["example.ploneaddon"]
         import example.ploneaddon
 
