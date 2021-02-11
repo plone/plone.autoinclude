@@ -97,18 +97,6 @@ class PackageTestCase:
             self.assertIn(context.path(filepath), context._seen_files)
         self.assertEqual(len(context._seen_files), len(self.configure_files))
 
-        # Features from meta:provides should normally not be available
-        # when loading configure.zcml
-        for feature in self.features:
-            self.assertFalse(
-                context.hasFeature(feature),
-                f"meta:provides feature {feature} unexpectedly loaded in configure.zcml",
-            )
-        # When running the tests with buildout, the 'illegal-feature'
-        # from example.plone_addon configure.zcml is available,
-        # and with pip not.  Strange.
-        # self.assertEqual(context._features, set())
-
     def test_load_zcml_file_overrides(self):
         from plone.autoinclude.loader import load_zcml_file
 
