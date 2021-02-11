@@ -1,3 +1,5 @@
+from .utils import get_configuration_context
+
 import unittest
 
 
@@ -28,17 +30,10 @@ class TestLoader(unittest.TestCase):
     def test_load_zcml_file(self):
         from plone.autoinclude.loader import load_zcml_file
 
-        context = None  # TODO: proper context
-        self.assertIsNone(
-            load_zcml_file(context, "zope.configuration", "zope.configuration")
-        )
-        self.assertIsNone(
-            load_zcml_file(
-                context, "zope.configuration", "zope.configuration", zcml="foo.zcml"
-            )
-        )
-        self.assertIsNone(
-            load_zcml_file(
-                context, "zope.configuration", "zope.configuration", override=True
-            )
-        )
+        import zope.configuration as package
+
+        context = get_configuration_context(package)
+        project_name = "zope.configuration"
+        load_zcml_file(context, project_name, package)
+        load_zcml_file(context, project_name, package, zcml="foo.zcml")
+        load_zcml_file(context, project_name, package, "overrides.zcml", override=True)

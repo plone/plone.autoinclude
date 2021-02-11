@@ -1,3 +1,4 @@
+from .utils import get_configuration_context
 from importlib import import_module
 
 import unittest
@@ -62,7 +63,7 @@ class TestPackagePloneAddon(unittest.TestCase):
 
         # prepare configuration context
         package = import_module(self.project_name)
-        context = self._context(package)
+        context = get_configuration_context(package)
         self.assertEqual(len(context._seen_files), 0)
 
         # Load configure.zcml.
@@ -77,7 +78,7 @@ class TestPackagePloneAddon(unittest.TestCase):
         from plone.autoinclude.loader import load_zcml_file
 
         package = import_module(self.project_name)
-        context = self._context(package)
+        context = get_configuration_context(package)
         load_zcml_file(context, self.project_name, package, zcml="foo.zcml")
         self.assertEqual(len(context._seen_files), 0)
 
@@ -85,7 +86,7 @@ class TestPackagePloneAddon(unittest.TestCase):
         from plone.autoinclude.loader import load_zcml_file
 
         package = import_module(self.project_name)
-        context = self._context(package)
+        context = get_configuration_context(package)
         # currently we have no override
         load_zcml_file(
             context, self.project_name, package, "overrides.zcml", override=True
