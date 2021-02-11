@@ -10,7 +10,6 @@ class TestPackagePloneAddon(unittest.TestCase, PackageTestCase):
     """
 
     project_name = "example.ploneaddon"
-    # How many files are loaded when we load meta.zcml, configure.zcml, overrides.zcml?
-    meta_files = 0
-    configure_files = 3
-    overrides_files = 0
+    meta_files = []
+    configure_files = ["configure.zcml", "permissions.zcml", "browser/configure.zcml"]
+    overrides_files = []

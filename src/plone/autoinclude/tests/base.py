@@ -13,10 +13,11 @@ class PackageTestCase:
     """
 
     project_name = ""
-    # How many files are loaded when we load meta.zcml, configure.zcml, overrides.zcml?
-    meta_files = 0
-    configure_files = 3
-    overrides_files = 0
+    # Which files are included when we load meta.zcml, configure.zcml, overrides.zcml?
+    # Make this empty in your test case when the package has no such zcml.
+    meta_files = ["meta.zcml"]
+    configure_files = ["configure.zcml"]
+    overrides_files = ["overrides.zcml"]
 
     def test_load_packages(self):
         from plone.autoinclude.loader import load_packages
@@ -58,7 +59,7 @@ class PackageTestCase:
             context.package = package
         return context
 
-    def test_load_zcml_file_configure(self):
+    def test_load_zcml_file_meta(self):
         from plone.autoinclude.loader import load_zcml_file
 
         # prepare configuration context
@@ -66,34 +67,40 @@ class PackageTestCase:
         context = get_configuration_context(package)
         self.assertEqual(len(context._seen_files), 0)
 
-        # Load configure.zcml.
-        load_zcml_file(context, self.project_name, package)
-        self.assertEqual(len(context._seen_files), self.configure_files)
-        self.assertIn(context.path("configure.zcml"), context._seen_files)
-        # This includes two other files.
-        self.assertIn(context.path("permissions.zcml"), context._seen_files)
-        self.assertIn(context.path("browser/configure.zcml"), context._seen_files)
+        load_zcml_file(context, self.project_name, package, "meta.zcml")
+        for filepath in self.meta_files:
+            self.assertIn(context.path(filepath), context._seen_files)
+        self.assertEqual(len(context._seen_files), len(self.meta_files))
 
-    def test_load_zcml_file_non_existing(self):
+    def test_load_zcml_file_configure(self):
         from plone.autoinclude.loader import load_zcml_file
 
+        # prepare configuration context
         package = import_module(self.project_name)
         context = get_configuration_context(package)
-        load_zcml_file(context, self.project_name, package, zcml="foo.zcml")
-        self.assertEqual(len(context._seen_files), 0)
+
+        # Load configure.zcml.
+        load_zcml_file(context, self.project_name, package)
+        for filepath in self.configure_files:
+            self.assertIn(context.path(filepath), context._seen_files)
+        self.assertEqual(len(context._seen_files), len(self.configure_files))
 
     def test_load_zcml_file_overrides(self):
         from plone.autoinclude.loader import load_zcml_file
 
         package = import_module(self.project_name)
         context = get_configuration_context(package)
-        # currently we have no override
         load_zcml_file(
             context, self.project_name, package, "overrides.zcml", override=True
         )
-        self.assertEqual(len(context._seen_files), self.overrides_files)
+        for filepath in self.overrides_files:
+            self.assertIn(context.path(filepath), context._seen_files)
+        self.assertEqual(len(context._seen_files), len(self.overrides_files))
 
+    def test_load_zcml_file_non_existing(self):
+        from plone.autoinclude.loader import load_zcml_file
 
-# def suite():
-#     suite = unittest.TestSuite()
-#     return suite
+        package = import_module(self.project_name)
+        context = get_configuration_context(package)
+        load_zcml_file(context, self.project_name, package, zcml="non_existing.zcml")
+        self.assertEqual(len(context._seen_files), 0)
