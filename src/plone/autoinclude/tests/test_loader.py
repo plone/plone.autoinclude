@@ -14,6 +14,7 @@ class TestLoader(unittest.TestCase):
                 "example.addon",
                 "example.metaoverrides",
                 "example.ploneaddon",
+                "example.somethingelse2",
                 "example.zopeaddon",
             ],
         )

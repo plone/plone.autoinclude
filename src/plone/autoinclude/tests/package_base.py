@@ -17,6 +17,8 @@ class PackageTestCase:
     project_name = ""
     # If module name differs from project name, fill this in:
     module_name = ""
+    # Does the package use plone.autoinclude (True) or the old z3c.autoinclude (False)?
+    uses_plone_autoinclude = True
     # Which files are included when we load meta.zcml, configure.zcml, overrides.zcml?
     # Make this empty in your test case when the package has no such zcml.
     # When you add a test package, make sure to update test_integration_plone.py
@@ -39,13 +41,16 @@ class PackageTestCase:
         packages = load_packages()
         if self.module_name:
             # Module name differs from project name.
-            # Currently this means we cannot find any zcml.
+            # Only modules names get in the packages list.
             self.assertNotIn(self.project_name, packages.keys())
-            self.assertNotIn(self.module_name, packages.keys())
-            return
-
-        self.assertIn(self.project_name, packages.keys())
-        loaded_package = packages[self.project_name]
+            if not self.uses_plone_autoinclude:
+                # The package uses the old z3c.autoinclude.
+                # This means we cannot find any zcml.
+                self.assertNotIn(self.module_name, packages.keys())
+                return
+        else:
+            self.assertIn(self.project_name, packages.keys())
+        loaded_package = packages[self.module_name or self.project_name]
         imported_package = self.import_me()
         self.assertEqual(loaded_package, imported_package)
 
@@ -95,7 +100,9 @@ class PackageTestCase:
         context = get_configuration_context(package)
         self.assertEqual(len(context._seen_files), 0)
 
-        load_zcml_file(context, self.module_name or self.project_name, package, "meta.zcml")
+        load_zcml_file(
+            context, self.module_name or self.project_name, package, "meta.zcml"
+        )
         for filepath in self.meta_files:
             self.assertIn(context.path(filepath), context._seen_files)
         self.assertEqual(len(context._seen_files), len(self.meta_files))
@@ -127,7 +134,11 @@ class PackageTestCase:
         package = self.import_me()
         context = get_configuration_context(package)
         load_zcml_file(
-            context, self.module_name or self.project_name, package, "overrides.zcml", override=True
+            context,
+            self.module_name or self.project_name,
+            package,
+            "overrides.zcml",
+            override=True,
         )
         for filepath in self.overrides_files:
             self.assertIn(context.path(filepath), context._seen_files)
@@ -138,5 +149,10 @@ class PackageTestCase:
 
         package = self.import_me()
         context = get_configuration_context(package)
-        load_zcml_file(context, self.module_name or self.project_name, package, zcml="non_existing.zcml")
+        load_zcml_file(
+            context,
+            self.module_name or self.project_name,
+            package,
+            zcml="non_existing.zcml",
+        )
         self.assertEqual(len(context._seen_files), 0)

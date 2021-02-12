@@ -10,6 +10,7 @@ class TestIntegration(IntegrationTestCase, unittest.TestCase):
         "example.ploneintegration": ["meta.zcml"],
         "plone.autoinclude": ["meta.zcml"],
         "example.metaoverrides": ["meta.zcml"],
+        "example.somethingelse2": ["meta.zcml"],
     }
     configure_files = {
         "example.ploneintegration": ["configure.zcml"],
@@ -18,12 +19,15 @@ class TestIntegration(IntegrationTestCase, unittest.TestCase):
             "permissions.zcml",
             "browser/configure.zcml",
         ],
+        "example.somethingelse2": ["configure.zcml"],
     }
     overrides_files = {
         "example.ploneintegration": ["overrides.zcml"],
         "example.metaoverrides": ["overrides.zcml"],
+        "example.somethingelse2": ["overrides.zcml"],
     }
     features = [
+        "different2",
         "disable-autoinclude",
         "metaoverrides",
         "ploneintegration",
