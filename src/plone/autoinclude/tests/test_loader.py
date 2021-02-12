@@ -9,7 +9,8 @@ class TestLoader(unittest.TestCase):
 
         packages = load_packages()
         self.assertEqual(
-            sorted(packages.keys()), ["example.metaoverrides", "example.ploneaddon"]
+            sorted(packages.keys()),
+            ["example.metaoverrides", "example.ploneaddon", "example.zopeaddon"],
         )
         package = packages["example.ploneaddon"]
         import example.ploneaddon
