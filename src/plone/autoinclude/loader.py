@@ -54,7 +54,14 @@ def load_packages(target=""):
 
 
 def get_zcml_file(project_name, zcml="configure.zcml"):
-    filename = resource_filename(project_name, zcml)
+    try:
+        filename = resource_filename(project_name, zcml)
+    except ModuleNotFoundError:
+        # Note: this may happen a lot, at least for z3c.autoinclude,
+        # because the project name may not be the same as the package/module.
+        logger.exception(f"Could not import {project_name}.")
+        _known_project_names[project_name] = None
+        return
     if not os.path.isfile(filename):
         return
     return filename
