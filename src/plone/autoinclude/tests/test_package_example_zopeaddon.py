@@ -1,4 +1,4 @@
-from .base import PackageTestCase
+from plone.autoinclude.tests.package_base import PackageTestCase
 
 import unittest
 

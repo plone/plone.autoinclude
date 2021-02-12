@@ -1,4 +1,4 @@
-from .base_integration import IntegrationTestCase
+from plone.autoinclude.tests.integration_base import IntegrationTestCase
 
 import unittest
 
