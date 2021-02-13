@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 
 setup(
-    name="example.metaoverrides",
+    name="example.zopeaddon",
     version="1.0a1",
     description="An add-on for Plone",
     long_description="long_description",
@@ -20,6 +20,6 @@ setup(
     ],
     entry_points="""
     [z3c.autoinclude.plugin]
-    target = plone
+    target = zope
     """,
 )

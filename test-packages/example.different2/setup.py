@@ -3,10 +3,10 @@ from setuptools import find_packages, setup
 
 
 setup(
-    name="example.metaoverrides",
+    name="example.different2",
     version="1.0a1",
-    description="An add-on for Plone",
-    long_description="long_description",
+    description="A second different package which is actually something else too",
+    long_description="Package name differs from import module name, using new entry point.",
     author="Maurits van Rees",
     author_email="m.van.rees@zestsoftware.nl",
     license="GPL version 2",
@@ -19,7 +19,7 @@ setup(
         "setuptools",
     ],
     entry_points="""
-    [z3c.autoinclude.plugin]
-    target = plone
+    [plone.autoinclude.plugin]
+    module = example.somethingelse2
     """,
 )

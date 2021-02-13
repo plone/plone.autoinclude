@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 
 setup(
-    name="example.metaoverrides",
+    name="example.ploneintegration",
     version="1.0a1",
     description="An add-on for Plone",
     long_description="long_description",
@@ -17,9 +17,6 @@ setup(
     zip_safe=False,
     install_requires=[
         "setuptools",
+        "plone.autoinclude",
     ],
-    entry_points="""
-    [z3c.autoinclude.plugin]
-    target = plone
-    """,
 )

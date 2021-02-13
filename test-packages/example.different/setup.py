@@ -3,10 +3,10 @@ from setuptools import find_packages, setup
 
 
 setup(
-    name="example.metaoverrides",
+    name="example.different",
     version="1.0a1",
-    description="An add-on for Plone",
-    long_description="long_description",
+    description="A different package which is actually something else",
+    long_description="Package name differs from import module name",
     author="Maurits van Rees",
     author_email="m.van.rees@zestsoftware.nl",
     license="GPL version 2",

@@ -46,7 +46,13 @@ class TestLoader(unittest.TestCase):
         from plone.autoinclude.loader import load_packages
 
         packages = load_packages()
-        self.assertIn('example.ploneaddon', packages.keys())
+        for package in [
+                "example.addon",
+                "example.metaoverrides",
+                "example.ploneaddon",
+                "example.somethingelse2",
+                "example.zopeaddon"]:
+            self.assertIn(package, packages.keys())
         package = packages["example.ploneaddon"]
         import example.ploneaddon
 
