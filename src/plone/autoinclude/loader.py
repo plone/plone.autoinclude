@@ -1,4 +1,4 @@
-from pkg_resources import iter_entry_points, resource_filename
+from pkg_resources import iter_entry_points, resource_filename, working_set
 from zope.configuration.xmlconfig import include, includeOverrides
 
 import importlib
@@ -77,22 +77,24 @@ def load_own_packages(target=""):
       on target, but we load the module by the given name.
     """
     dists = {}
-    for ep in iter_entry_points(group="plone.autoinclude.plugin"):
+    for wsdist in working_set:
+        eps = wsdist.get_entry_map("plone.autoinclude.plugin")
+        if not bool(eps):
+            continue
         # If we look for target 'plone' then only consider entry points
         # that are registered for this target (module name).
         # But if the entry point is not registered for a specific target,
         # we can include it.
-        # import pdb; pdb.set_trace()
         module_name = None
-        if ep.name == "target":
-            if target and ep.module_name != target:
+        if 'target' in eps:
+            if target and eps['target'].module_name != target:
                 # entry point defines target X but we only want target Y.
                 continue
-            module_name = ep.dist.project_name
-        elif ep.name == "module":
+            module_name = wsdist.project_name
+        if "module" in eps:
             # We could load the dist with ep.load(), but we do it differently.
-            module_name = ep.module_name
-        else:
+            module_name = eps['module'].module_name
+        if module_name is None:
             # We could log a warning, but really this is an error.
             raise ValueError(
                 f"plone.autoinclude.plugin entry point with unknown name found. "

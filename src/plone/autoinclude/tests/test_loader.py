@@ -15,7 +15,7 @@ class TestLoader(unittest.TestCase):
         workingset = pkg_resources.working_set
         self.workingdir = os.getcwd()
         self.stored_syspath = copy(sys.path)
-        projects_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'test-packages')  # noqa: E501
+        projects_dir = os.path.join(os.path.dirname(__file__), 'test-packages')  # noqa: E501
         test_packages = os.listdir(projects_dir)
         self.added_entries = []
         for package in test_packages:
@@ -42,16 +42,26 @@ class TestLoader(unittest.TestCase):
         for entry in self.added_entries:
             workingset.entries.remove(entry)
 
-    def test_load_packages(self):
-        from plone.autoinclude.loader import load_packages
+    def test_load_z3c_packages(self):
+        from plone.autoinclude.loader import load_z3c_packages
 
-        packages = load_packages()
+        packages = load_z3c_packages()
         for package in [
-                "example.addon",
-                "example.metaoverrides",
                 "example.ploneaddon",
-                "example.somethingelse2",
-                "example.zopeaddon"]:
+                ]:
+            self.assertIn(package, packages.keys())
+        package = packages["example.ploneaddon"]
+        import example.ploneaddon
+
+        self.assertEqual(package, example.ploneaddon)
+
+    def test_load_own_packages(self):
+        from plone.autoinclude.loader import load_own_packages
+
+        packages = load_own_packages()
+        for package in [
+                "example.ploneaddon",
+                ]:
             self.assertIn(package, packages.keys())
         package = packages["example.ploneaddon"]
         import example.ploneaddon
