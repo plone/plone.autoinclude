@@ -46,9 +46,7 @@ class TestLoader(unittest.TestCase):
         from plone.autoinclude.loader import load_z3c_packages
 
         packages = load_z3c_packages()
-        for package in [
-                "example.ploneaddon",
-                ]:
+        for package in ["example.ploneaddon", ]:
             self.assertIn(package, packages.keys())
         package = packages["example.ploneaddon"]
         import example.ploneaddon
@@ -59,9 +57,7 @@ class TestLoader(unittest.TestCase):
         from plone.autoinclude.loader import load_own_packages
 
         packages = load_own_packages()
-        for package in [
-                "example.ploneaddon",
-                ]:
+        for package in ["example.ploneaddon", ]:
             self.assertIn(package, packages.keys())
         package = packages["example.ploneaddon"]
         import example.ploneaddon
