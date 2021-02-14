@@ -97,9 +97,7 @@ def load_own_packages(target=""):
         if module_name is None:
             # We could log a warning, but really this is an error.
             raise ValueError(
-                f"plone.autoinclude.plugin entry point with unknown name found. "
-                f"Expected is 'target' or 'module', got {ep.name}. "
-                f"Package is {ep.dist.project_name}, entry point is {ep}"
+                "plone.autoinclude.plugin entry point with no suitable name found. "
             )
         if module_name not in _known_module_names:
             # We could try/except ModuleNotFoundError, but this is an unexpected error.
