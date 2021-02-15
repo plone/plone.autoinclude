@@ -86,14 +86,14 @@ def load_own_packages(target=""):
         # But if the entry point is not registered for a specific target,
         # we can include it.
         module_name = None
-        if 'target' in eps:
-            if target and eps['target'].module_name != target:
+        if "target" in eps:
+            if target and eps["target"].module_name != target:
                 # entry point defines target X but we only want target Y.
                 continue
             module_name = wsdist.project_name
         if "module" in eps:
             # We could load the dist with ep.load(), but we do it differently.
-            module_name = eps['module'].module_name
+            module_name = eps["module"].module_name
         if module_name is None:
             # We could log a warning, but really this is an error.
             raise ValueError(
