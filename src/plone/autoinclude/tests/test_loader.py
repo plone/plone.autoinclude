@@ -1,27 +1,37 @@
-from copy import copy
-import os
-import sys
-import pkg_resources
-from setuptools.command.egg_info import egg_info
-import distutils.core
 from .utils import get_configuration_context
+from copy import copy
+from setuptools.command.egg_info import egg_info
 
+import distutils.core
+import os
+import pkg_resources
+import sys
 import unittest
 
 
-class TestLoader(unittest.TestCase):
+# Get directory with test packages.
+test_dir = "test-packages"
+directory = os.path.dirname(__file__)
+while test_dir not in os.listdir(directory):
+    parent = os.path.realpath(os.path.dirname(directory))
+    if parent == directory:
+        # reached root folder
+        raise ValueError(f"Directory {test_dir} not found.")
+    directory = parent
+PROJECTS_DIR = os.path.realpath(os.path.join(directory, test_dir))
 
+
+class TestLoader(unittest.TestCase):
     def setUp(self):
         workingset = pkg_resources.working_set
         self.workingdir = os.getcwd()
         self.stored_syspath = copy(sys.path)
-        projects_dir = os.path.join(os.path.dirname(__file__), 'test-packages')  # noqa: E501
-        test_packages = os.listdir(projects_dir)
+        test_packages = os.listdir(PROJECTS_DIR)
         self.added_entries = []
         for package in test_packages:
-            packagedir = os.path.join(projects_dir, package)
+            packagedir = os.path.join(PROJECTS_DIR, package)
             os.chdir(packagedir)
-            dist = distutils.core.run_setup('setup.py')
+            dist = distutils.core.run_setup("setup.py")
             ei = egg_info(dist)
             ei.finalize_options()
             try:
@@ -29,7 +39,7 @@ class TestLoader(unittest.TestCase):
             except FileExistsError:
                 pass
             ei.run()
-            egginfodir = os.path.join(packagedir, 'src')
+            egginfodir = os.path.join(packagedir, "src")
             workingset.add_entry(egginfodir)
             self.added_entries.append(egginfodir)
             sys.path.append(egginfodir)
@@ -46,7 +56,9 @@ class TestLoader(unittest.TestCase):
         from plone.autoinclude.loader import load_z3c_packages
 
         packages = load_z3c_packages()
-        for package in ["example.ploneaddon", ]:
+        for package in [
+            "example.ploneaddon",
+        ]:
             self.assertIn(package, packages.keys())
         package = packages["example.ploneaddon"]
         import example.ploneaddon
@@ -57,12 +69,14 @@ class TestLoader(unittest.TestCase):
         from plone.autoinclude.loader import load_own_packages
 
         packages = load_own_packages()
-        for package in ["example.ploneaddon", ]:
+        for package in [
+            "example.somethingelse2",
+        ]:
             self.assertIn(package, packages.keys())
-        package = packages["example.ploneaddon"]
-        import example.ploneaddon
+        package = packages["example.somethingelse2"]
+        import example.somethingelse2
 
-        self.assertEqual(package, example.ploneaddon)
+        self.assertEqual(package, example.somethingelse2)
 
     def test_get_zcml_file(self):
         from plone.autoinclude.loader import get_zcml_file
