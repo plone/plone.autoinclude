@@ -58,6 +58,7 @@ class TestLoader(unittest.TestCase):
         packages = load_z3c_packages()
         for package in [
             "example.ploneaddon",
+            "example.multipleeps",
         ]:
             self.assertIn(package, packages.keys())
         package = packages["example.ploneaddon"]
@@ -71,6 +72,7 @@ class TestLoader(unittest.TestCase):
         packages = load_own_packages()
         for package in [
             "example.somethingelse2",
+            "example.multipleeps",
         ]:
             self.assertIn(package, packages.keys())
         package = packages["example.somethingelse2"]
