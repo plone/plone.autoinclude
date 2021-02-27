@@ -20,6 +20,7 @@ class TestIntegration(IntegrationTestCase, unittest.TestCase):
             "browser/configure.zcml",
         ],
         "example.somethingelse2": ["configure.zcml"],
+        "example.multipleeps": ["configure.zcml"],
     }
     overrides_files = {
         "example.ploneintegration": ["overrides.zcml"],
