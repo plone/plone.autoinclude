@@ -1,6 +1,23 @@
 from .utils import get_configuration_context
 from importlib import import_module
 
+import pkg_resources
+
+try:
+    pkg_resources.get_distribution("plone.autoinclude")
+    HAS_PLONE_AUTOINCLUDE = True
+except pkg_resources.DistributionNotFound:
+    HAS_PLONE_AUTOINCLUDE = False
+try:
+    pkg_resources.get_distribution("z3c.autoinclude")
+    HAS_Z3C_AUTOINCLUDE = True
+except pkg_resources.DistributionNotFound:
+    HAS_Z3C_AUTOINCLUDE = False
+if HAS_PLONE_AUTOINCLUDE and HAS_Z3C_AUTOINCLUDE:
+    raise ValueError(
+        "In the tests at most one of plone.autoinclude and z3c.autoinclude should be available, not both."
+    )
+
 
 class IntegrationTestCase:
     """Test integration with a project that uses plone.autoinclude to load other packages.
@@ -60,12 +77,15 @@ class IntegrationTestCase:
         We do not yet load configure.zcml or overrides.zcml.
         That is done in the tests.
         """
-        from plone.autoinclude.loader import load_zcml_file
-
         # prepare configuration context
         package = import_module(self.project_name)
         self.context = get_configuration_context(package)
-        load_zcml_file(self.context, self.project_name, package, "meta.zcml")
+        self.load_zcml_file("meta.zcml")
+
+    def load_zcml_file(self, zcml="configure.zcml", override=False):
+        from plone.autoinclude.loader import load_zcml_file
+
+        load_zcml_file(self.context, self.project_name, zcml=zcml, override=override)
 
     @property
     def meta_count(self):
@@ -114,10 +134,8 @@ class IntegrationTestCase:
 
     def test_configure(self):
         # Load configure.zcml.
-        from plone.autoinclude.loader import load_zcml_file
-
         self.assertNotIn(self.context.path("configure.zcml"), self.context._seen_files)
-        load_zcml_file(self.context, self.project_name)
+        self.load_zcml_file()
         self.assertIn(self.context.path("configure.zcml"), self.context._seen_files)
         self.files_have_been_loaded(self.configure_files)
         self.assertEqual(
@@ -128,11 +146,9 @@ class IntegrationTestCase:
 
     def test_overrides(self):
         # Load overrides.zcml.
-        from plone.autoinclude.loader import load_zcml_file
-
         self.assertNotIn(self.context.path("overrides.zcml"), self.context._seen_files)
-        load_zcml_file(
-            self.context, self.project_name, zcml="overrides.zcml", override=True
+        self.load_zcml_file(
+            zcml="overrides.zcml", override=True
         )
         self.assertIn(self.context.path("overrides.zcml"), self.context._seen_files)
         self.files_have_been_loaded(self.overrides_files)
@@ -144,12 +160,8 @@ class IntegrationTestCase:
 
     def test_all_zcml(self):
         # Load configure.zcml and overrides.zcml.
-        from plone.autoinclude.loader import load_zcml_file
-
-        load_zcml_file(self.context, self.project_name)
-        load_zcml_file(
-            self.context, self.project_name, zcml="overrides.zcml", override=True
-        )
+        self.load_zcml_file()
+        self.load_zcml_file(zcml="overrides.zcml", override=True)
         self.files_have_been_loaded(self.meta_files)
         self.files_have_been_loaded(self.configure_files)
         self.files_have_been_loaded(self.overrides_files)
