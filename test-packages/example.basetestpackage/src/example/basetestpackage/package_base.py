@@ -1,6 +1,16 @@
 from .utils import get_configuration_context
 from importlib import import_module
 
+import pkg_resources
+import unittest
+
+
+try:
+    pkg_resources.get_distribution("plone.autoinclude")
+    HAS_PLONE_AUTOINCLUDE = True
+except pkg_resources.DistributionNotFound:
+    HAS_PLONE_AUTOINCLUDE = False
+
 
 class PackageTestCase:
     """Test our interaction with a package.
@@ -35,6 +45,7 @@ class PackageTestCase:
             return import_module(self.module_name)
         return import_module(self.project_name)
 
+    @unittest.skipIf(not HAS_PLONE_AUTOINCLUDE, "plone.autoinclude missing")
     def test_load_packages(self):
         from plone.autoinclude.loader import load_packages
 
@@ -54,6 +65,7 @@ class PackageTestCase:
         imported_package = self.import_me()
         self.assertEqual(loaded_package, imported_package)
 
+    @unittest.skipIf(not HAS_PLONE_AUTOINCLUDE, "plone.autoinclude missing")
     def test_get_zcml_file_non_existing(self):
         from plone.autoinclude.loader import get_zcml_file
 
@@ -61,6 +73,7 @@ class PackageTestCase:
         if self.module_name:
             self.assertIsNone(get_zcml_file(self.module_name, zcml="foo.zcml"))
 
+    @unittest.skipIf(not HAS_PLONE_AUTOINCLUDE, "plone.autoinclude missing")
     def test_get_zcml_file_default(self):
         from plone.autoinclude.loader import get_zcml_file
 
@@ -79,19 +92,7 @@ class PackageTestCase:
                 f"This is configure.zcml from {self.project_name}.", myfile.read()
             )
 
-    def _context(self, package=None):
-        # Various functions take a configuration context as argument.
-        # From looking at zope.configuration.xmlconfig.file the following seems about right.
-        from zope.configuration.config import ConfigurationMachine
-        from zope.configuration.xmlconfig import registerCommonDirectives
-
-        context = ConfigurationMachine()
-        registerCommonDirectives(context)
-        if package is not None:
-            # When you set context.package, context.path(filename) works nicely.
-            context.package = package
-        return context
-
+    @unittest.skipIf(not HAS_PLONE_AUTOINCLUDE, "plone.autoinclude missing")
     def test_load_zcml_file_meta(self):
         from plone.autoinclude.loader import load_zcml_file
 
@@ -114,6 +115,7 @@ class PackageTestCase:
             )
         self.assertEqual(context._features, set(self.features))
 
+    @unittest.skipIf(not HAS_PLONE_AUTOINCLUDE, "plone.autoinclude missing")
     def test_load_zcml_file_configure(self):
         from plone.autoinclude.loader import load_zcml_file
 
@@ -128,6 +130,7 @@ class PackageTestCase:
             self.assertIn(context.path(filepath), context._seen_files)
         self.assertEqual(len(context._seen_files), len(self.configure_files))
 
+    @unittest.skipIf(not HAS_PLONE_AUTOINCLUDE, "plone.autoinclude missing")
     def test_load_zcml_file_overrides(self):
         from plone.autoinclude.loader import load_zcml_file
 
@@ -144,6 +147,7 @@ class PackageTestCase:
             self.assertIn(context.path(filepath), context._seen_files)
         self.assertEqual(len(context._seen_files), len(self.overrides_files))
 
+    @unittest.skipIf(not HAS_PLONE_AUTOINCLUDE, "plone.autoinclude missing")
     def test_load_zcml_file_non_existing(self):
         from plone.autoinclude.loader import load_zcml_file
 

@@ -8,8 +8,8 @@ def get_configuration_context(package=None):
     Various functions take a configuration context as argument.
     From looking at zope.configuration.xmlconfig.file the following seems about right.
 
-    Note: there is a copy of this function in example.basetestpackage.
-    The duplication is deliberate: I don't one to to import code from the other, for now.
+    Note: this is a copy of a function in plone.autoinclude.tests.utils.
+    The duplication is deliberate: I don't one to import code from the other, for now.
     """
     context = ConfigurationMachine()
     registerCommonDirectives(context)
