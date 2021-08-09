@@ -18,5 +18,8 @@ setup(
     install_requires=[
         "setuptools",
     ],
+    extras_require={
+        "z3c": ["z3c.autoinclude"]
+    }
     # Note: no entry points here.
 )

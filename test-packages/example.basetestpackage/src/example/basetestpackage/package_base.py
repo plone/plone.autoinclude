@@ -10,6 +10,15 @@ try:
     HAS_PLONE_AUTOINCLUDE = True
 except pkg_resources.DistributionNotFound:
     HAS_PLONE_AUTOINCLUDE = False
+try:
+    pkg_resources.get_distribution("z3c.autoinclude")
+    HAS_Z3C_AUTOINCLUDE = True
+except pkg_resources.DistributionNotFound:
+    HAS_Z3C_AUTOINCLUDE = False
+if HAS_PLONE_AUTOINCLUDE and HAS_Z3C_AUTOINCLUDE:
+    raise ValueError(
+        "In the tests at most one of plone.autoinclude and z3c.autoinclude should be available, not both."
+    )
 
 
 class PackageTestCase:
@@ -28,7 +37,11 @@ class PackageTestCase:
     # If module name differs from project name, fill this in:
     module_name = ""
     # Does the package use plone.autoinclude (True) or the old z3c.autoinclude (False)?
+    # Attribute is only used when we have a different module_name.
     uses_plone_autoinclude = True
+    # Is the package expected to work when only z3c.autoinclude is available?
+    # It should work when it uses [z3c.autoinclude.plugin] with 'target = plone'.
+    standard_z3c_autoinclude = False
     # Which files are included when we load meta.zcml, configure.zcml, overrides.zcml?
     # Make this empty in your test case when the package has no such zcml.
     # When you add a test package, make sure to update test_integration_plone.py
@@ -52,13 +65,14 @@ class PackageTestCase:
         packages = load_packages()
         if self.module_name:
             # Module name differs from project name.
-            # Only modules names get in the packages list.
+            # Only module names get in the packages list.
             self.assertNotIn(self.project_name, packages.keys())
             if not self.uses_plone_autoinclude:
                 # The package uses the old z3c.autoinclude.
                 # This means we cannot find any zcml.
                 self.assertNotIn(self.module_name, packages.keys())
                 return
+            self.assertIn(self.module_name, packages.keys())
         else:
             self.assertIn(self.project_name, packages.keys())
         loaded_package = packages[self.module_name or self.project_name]
@@ -160,3 +174,27 @@ class PackageTestCase:
             zcml="non_existing.zcml",
         )
         self.assertEqual(len(context._seen_files), 0)
+
+    @unittest.skipIf(not HAS_Z3C_AUTOINCLUDE, "z3c.autoinclude missing")
+    def test_z3c_plugin_finder(self):
+        # Can z3c.autoinclude find all packages that use its entry point in setup.py?
+        if not self.standard_z3c_autoinclude:
+            self.skipTest("No standard z3c.autoinclude setup.")
+
+        from z3c.autoinclude.plugin import PluginFinder
+
+        # We look for entry points with target plone.
+        finder = PluginFinder("plone")
+        # And we look for any zcml files.
+        info = finder.includableInfo(["meta.zcml", "configure.zcml", "overrides.zcml"])
+        # info is a dict. Example key: 'meta.zcml'.  Example value: list of module names.
+        modules = []
+        for values in info.values():
+            modules.extend(values)
+        if self.module_name:
+            # Module name differs from project name.
+            # Only module names get in the modules list.
+            self.assertIn(self.module_name, modules)
+            self.assertNotIn(self.project_name, modules)
+        else:
+            self.assertIn(self.project_name, modules)

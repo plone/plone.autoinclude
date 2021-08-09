@@ -8,3 +8,4 @@ class TestPackage(PackageTestCase, unittest.TestCase):
     # This package only has meta.zcml and overrides.zcml, no configure.zcml.
     configure_files = []
     features = ["metaoverrides"]
+    standard_z3c_autoinclude = True
