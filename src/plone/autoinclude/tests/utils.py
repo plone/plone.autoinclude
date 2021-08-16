@@ -9,7 +9,7 @@ def get_configuration_context(package=None):
     From looking at zope.configuration.xmlconfig.file the following seems about right.
 
     Note: there is a copy of this function in example.basetestpackage.
-    The duplication is deliberate: I don't one to to import code from the other, for now.
+    The duplication is deliberate: I don't want one package to import code from the other, for now.
     """
     context = ConfigurationMachine()
     registerCommonDirectives(context)
