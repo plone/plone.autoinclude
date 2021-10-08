@@ -22,6 +22,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Programming Language :: Python",
@@ -47,12 +48,6 @@ setup(
         "setuptools",
         "zope.configuration",
     ],
-    extras_require={
-        # 'test': [
-        #     # Maybe
-        #     'plone.testing>=5.0.0',
-        # ],
-    },
     # Just as a reminder of a z3c.autoinclude entry point:
     # entry_points="""
     # [z3c.autoinclude.plugin]
