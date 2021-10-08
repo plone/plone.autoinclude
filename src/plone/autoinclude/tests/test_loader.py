@@ -16,7 +16,7 @@ while test_dir not in os.listdir(directory):
     parent = os.path.realpath(os.path.dirname(directory))
     if parent == directory:
         # reached root folder
-        raise ValueError(f"Directory {test_dir} not found.")
+        raise ValueError(f"Directory {test_dir} not found.")  # pragma: no cover
     directory = parent
 PROJECTS_DIR = os.path.realpath(os.path.join(directory, test_dir))
 
@@ -103,3 +103,18 @@ class TestLoader(unittest.TestCase):
         load_zcml_file(context, project_name, package)
         load_zcml_file(context, project_name, package, zcml="foo.zcml")
         load_zcml_file(context, project_name, package, "overrides.zcml", override=True)
+
+    def test_get_configuration_context(self):
+        # This test is here mostly to increase test coverage, even of test code.
+        # Test what happens when get_configuration_context is called without package.
+        context = get_configuration_context()
+        self.assertIsNone(context.package)
+
+    def test_includePluginsDirective(self):
+        # This is just to check that includePluginsDirective can be called
+        # without filename.  Bit hard to check in detail without creating
+        # even more test packages.
+        from plone.autoinclude.zcml import includePluginsDirective
+
+        context = get_configuration_context()
+        includePluginsDirective(context, "plone")
