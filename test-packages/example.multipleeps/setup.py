@@ -19,13 +19,13 @@ setup(
         "setuptools",
     ],
     entry_points={
-        'z3c.autoinclude.plugin': [
-            'dummy = dummy',
+        "z3c.autoinclude.plugin": [
+            "dummy = dummy",
         ],
-        'plone.autoinclude.plugin': [
-            'target = plone',
-            'module = example.multipleeps',
-            'zcml = configure.zcml',
+        "plone.autoinclude.plugin": [
+            "target = plone",
+            "module = example.multipleeps",
+            "zcml = configure.zcml",
         ],
     },
 )

@@ -147,9 +147,7 @@ class IntegrationTestCase:
     def test_overrides(self):
         # Load overrides.zcml.
         self.assertNotIn(self.context.path("overrides.zcml"), self.context._seen_files)
-        self.load_zcml_file(
-            zcml="overrides.zcml", override=True
-        )
+        self.load_zcml_file(zcml="overrides.zcml", override=True)
         self.assertIn(self.context.path("overrides.zcml"), self.context._seen_files)
         self.files_have_been_loaded(self.overrides_files)
         self.assertEqual(

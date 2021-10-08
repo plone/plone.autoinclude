@@ -43,8 +43,7 @@ class TestIntegration(IntegrationTestCase, unittest.TestCase):
     ]
 
     def setUp(self):
-        """Load meta.zcml
-        """
+        """Load meta.zcml"""
         # prepare configuration context
         package = import_module(self.project_name)
         self.context = get_configuration_context(package)
