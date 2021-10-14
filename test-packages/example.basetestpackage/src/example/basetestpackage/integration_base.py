@@ -3,6 +3,7 @@ from importlib import import_module
 
 import pkg_resources
 
+
 try:
     pkg_resources.get_distribution("plone.autoinclude")
     HAS_PLONE_AUTOINCLUDE = True

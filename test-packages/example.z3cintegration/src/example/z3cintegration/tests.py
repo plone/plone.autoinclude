@@ -4,8 +4,9 @@ from example.basetestpackage.utils import get_configuration_context
 from importlib import import_module
 from zope.configuration.xmlconfig import include, includeOverrides
 
-import unittest
 import sys
+import unittest
+
 
 # When loading our meta.zcml, z3c.autoinclude/zope/configuration
 # tries to import 'plone', because this is our target.
