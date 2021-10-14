@@ -107,12 +107,6 @@ You must specify at least one option, otherwise the entry point does not exist.
 ``module``
     Use this when your package name is different from what you import in Python.
 
-Another option that we thought about, is ``zcml``.
-By default we load ``meta.zcml``, ``configure.zcml``, and ``overrides.zcml``.
-With ``zcml = other.zcml``, we would instead only load ``other.zcml`.
-But this is not actually implemented, and looks a bit tricky, needing a restructuring of the data we gather in ``loader.load_packages`` and how we handle it in ``zcml.py``.
-TODO: I should probably just remove this remark.  But having it in git history is good.
-
 
 Comparison with ``z3c.autoinclude``
 -----------------------------------

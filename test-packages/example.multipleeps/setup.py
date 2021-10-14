@@ -25,7 +25,6 @@ setup(
         "plone.autoinclude.plugin": [
             "target = plone",
             "module = example.multipleeps",
-            "zcml = configure.zcml",
         ],
     },
 )

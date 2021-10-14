@@ -50,31 +50,14 @@ def load_own_packages(target=""):
     After running the function, the packages have been imported.
     This returns a dictionary of package names and packages.
 
-    Okay, entry points are less flexible than I thought.
-    I expected you could write something like this:
+    Etnry points are like this:
 
         [plone.autoinclude]
         target = plone
         module = collective.mypackage
-        zcml = configure.zcml,overrides.zcml
 
-    and then you should be able to ask the entry point what its
-    target, module and zcml attributes are.
-    But this is not the case.
-    You can only have one option in there, the rest is ignored.
-    So either you set a target, or a module, or zcml.
-
-    With 'target = plone' the entry point has name='target'
-    and module_name='plone'.
-    Calling entrypoint.load() will load the plone module.
-
-    For our use case, it seems best to support target and module.
-
-    - If the entrypoint names a target, then we use this as filter
-      and assume the module name is the same as the package name.
-
-    - If the entrypoint names a module, then we do not filter
-      on target, but we load the module by the given name.
+    Both options are optional, but you must have at least one,
+    and it must have a value.
     """
     dists = {}
     for wsdist in working_set:
@@ -84,7 +67,9 @@ def load_own_packages(target=""):
         # If we look for target 'plone' then only consider entry points
         # that are registered for this target (module name).
         # But if the entry point is not registered for a specific target,
-        # we can include it.
+        # we can include it.  The biggest reason for doing this,
+        # is that I first thought you could not specify both
+        # target and module at the same time.
         module_name = None
         if "target" in eps:
             if target and eps["target"].module_name != target:
@@ -97,7 +82,7 @@ def load_own_packages(target=""):
         if module_name is None:  # pragma: no cover
             # We could log a warning, but really this is an error.
             raise ValueError(
-                "plone.autoinclude.plugin entry point with no suitable name found. "
+                "plone.autoinclude.plugin entry point with no suitable name found."
             )
         if module_name not in _known_module_names:
             # We could try/except ModuleNotFoundError, but this is an unexpected error.
