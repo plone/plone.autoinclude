@@ -94,7 +94,7 @@ def load_own_packages(target=""):
         if "module" in eps:
             # We could load the dist with ep.load(), but we do it differently.
             module_name = eps["module"].module_name
-        if module_name is None:
+        if module_name is None:  # pragma: no cover
             # We could log a warning, but really this is an error.
             raise ValueError(
                 "plone.autoinclude.plugin entry point with no suitable name found. "

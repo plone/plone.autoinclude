@@ -1,7 +1,8 @@
 <configure
     xmlns="http://namespaces.zope.org/zope">
 
-  <autoIncludePluginsOverrides target="plone" file="overrides.zcml" />
+  <!-- When no 'file' is explicitly set here, the code takes 'overrides.zcml'. -->
+  <autoIncludePluginsOverrides target="plone" />
 
   <!-- FOR TESTS: This is overrides.zcml from example.ploneintegration. -->
 

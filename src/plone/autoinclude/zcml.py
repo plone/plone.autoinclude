@@ -68,4 +68,4 @@ def includePluginsOverridesDirective(context, target, file=None):
     dists = loader.load_packages(target)
 
     for filename in zcml_to_look_for:
-        loader.load_configure(context, filename, dists)
+        loader.load_overrides(context, filename, dists)
