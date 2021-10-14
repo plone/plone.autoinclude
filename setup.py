@@ -35,7 +35,6 @@ setup(
         "PyPI": "https://pypi.org/project/plone.autoinclude/",
         "Source": "https://github.com/plone/plone.autoinclude",
         "Tracker": "https://github.com/plone/plone.autoinclude/issues",
-        # 'Documentation': 'https://plone.autoinclude.readthedocs.io/en/latest/',
     },
     license="GPL version 2",
     packages=find_packages("src", exclude=["ez_setup"]),
@@ -48,9 +47,4 @@ setup(
         "setuptools",
         "zope.configuration",
     ],
-    # Just as a reminder of a z3c.autoinclude entry point:
-    # entry_points="""
-    # [z3c.autoinclude.plugin]
-    # target = plone
-    # """,
 )
