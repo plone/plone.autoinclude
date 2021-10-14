@@ -32,7 +32,7 @@ class IIncludePluginsDirective(Interface):
     )
 
 
-def includePluginsDirective(context, target, file=None):
+def includePluginsDirective(context, target="", file=None):
 
     # if api.plugins_disabled():
     #     log.warn(
@@ -52,7 +52,7 @@ def includePluginsDirective(context, target, file=None):
         loader.load_configure(context, filename, dists)
 
 
-def includePluginsOverridesDirective(context, target, file=None):
+def includePluginsOverridesDirective(context, target="", file=None):
 
     # if api.plugins_disabled():
     #     log.warn(
