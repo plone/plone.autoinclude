@@ -127,6 +127,10 @@ Comparison with ``z3c.autoinclude``
   The target of the entry point must match the target that is being loaded.
   ``plone.autoinclude`` *does* support empty targets: they will always get loaded.
   This is not good or bad, it is just a different choice.
+- ``z3c.autoinclude`` supports disabling loading the plugins, via either an environment variable or an api call.
+  ``plone.autoinclude`` does not.
+  But ``Products.CMFPlone`` currently loads the ``z3c.autoinclude`` plugins unless a zcml condition is true: ``not-have disable-autoinclude``.
+  When ``Products.CMFPlone`` switches to ``plone.autoinclude``, it can use this same condition.
 
 In general, ``plone.autoinclude`` is a bit more modern, as it only started in 2020, and only supports Python 3.
 

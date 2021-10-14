@@ -5,9 +5,6 @@ from zope.schema import NativeStringLine
 import logging
 
 
-# from z3c.autoinclude import api
-
-
 logger = logging.getLogger(__name__)
 
 
@@ -33,39 +30,20 @@ class IIncludePluginsDirective(Interface):
 
 
 def includePluginsDirective(context, target="", file=None):
-
-    # if api.plugins_disabled():
-    #     log.warn(
-    #         "z3c.autoinclude.plugin is disabled but is being invoked by %s"
-    #         % _context.info
-    #     )
-    #     return
-
     if file is None:
         zcml_to_look_for = ["meta.zcml", "configure.zcml"]
     else:
         zcml_to_look_for = [file]
-
     dists = loader.load_packages(target)
-
     for filename in zcml_to_look_for:
         loader.load_configure(context, filename, dists)
 
 
 def includePluginsOverridesDirective(context, target="", file=None):
-
-    # if api.plugins_disabled():
-    #     log.warn(
-    #         "z3c.autoinclude.plugin is disabled but is being invoked by %s"
-    #         % _context.info
-    #     )
-    #     return
-
     if file is None:
         zcml_to_look_for = ["overrides.zcml"]
     else:
         zcml_to_look_for = [file]
     dists = loader.load_packages(target)
-
     for filename in zcml_to_look_for:
         loader.load_overrides(context, filename, dists)
