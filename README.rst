@@ -211,20 +211,19 @@ And see `CMFPlone branch plone-autoinclude <https://github.com/plone/Products.CM
 Installation with pip
 ---------------------
 
-Let's leave buildout completely out of the picture and only use pip, in this case with plone 5.2.3::
+Let's leave buildout completely out of the picture and only use pip, in this case with plone 5.2.5.
+We use the legacy resolver from pip, to avoid some possible problems that have nothing to do with autoinclude::
 
     # Create virtual environment in the current directory:
     python3.8 -mvenv .
-    # Install Plone:
-    bin/pip install -c https://dist.plone.org/release/5.2.3/constraints3.txt Products.CMFPlone
+    # Install Plone and Paste:
+    bin/pip install -c https://dist.plone.org/release/5.2.5/constraints.txt Products.CMFPlone Paste --use-deprecated legacy-resolver
     # Install plone.autoinclude from the current git checkout:
     bin/pip install -e .
-    # When I try bin/mkwsgiinstance it complains that Paste is missing.
-    # We could use waitress instead, but let's try Paste for now:
-    bin/pip install -c https://dist.plone.org/release/5.2.3/constraints3.txt Paste
+    # or 'bin/pip install plone.autoinclude' to get the latest from PyPI.
     # Create the Zope WSGI instance:
     bin/mkwsgiinstance -d . -u admin:admin
-    # Copy our zcml that disables z3c.autoinclude and enables our own:
+    # Copy our zcml that disables z3c.autoinclude and enables our own.
     cp -a package-includes etc/
     # Start Zope:
     bin/runwsgi -v etc/zope.ini
