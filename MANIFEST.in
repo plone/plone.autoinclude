@@ -18,3 +18,6 @@ graft test-packages
 recursive-include package-includes *.zcml
 # check-manifest in the tox lint job may complain about these when you run jobs in parallel:
 global-exclude *.pyc *.pyo
+include pyproject.toml
+recursive-exclude news *
+exclude news
