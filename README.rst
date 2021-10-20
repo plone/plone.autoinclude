@@ -10,10 +10,6 @@
     :target: https://pypi.org/project/plone.autoinclude/
     :alt: Latest Version
 
-.. image:: https://img.shields.io/pypi/status/plone.autoinclude.svg
-    :target: https://pypi.org/project/plone.autoinclude
-    :alt: Egg Status
-
 .. image:: https://img.shields.io/pypi/pyversions/plone.autoinclude.svg?style=plastic   :alt: Supported - Python Versions
 
 .. image:: https://img.shields.io/pypi/l/plone.autoinclude.svg
@@ -83,6 +79,9 @@ But if you do not care about compatibility with ``z3c.autoinclude``, you could u
 
 It does the same thing, but it only works with ``plone.autoinclude``.
 
+Note: you should *not* add ``plone.autoinclude`` in your ``install_dependencies``.
+It is the responsibility of the framework (usually Plone) to do this.
+
 
 Entry point details
 -------------------
@@ -135,30 +134,53 @@ Comparison with ``z3c.autoinclude``
 In general, ``plone.autoinclude`` is a bit more modern, as it only started in 2020, and only supports Python 3.
 
 
-Installation
-------------
+Inclusion in Plone now
+----------------------
 
-Note: this will change when/if Plone 6 uses ``plone.autoinclude`` by default.
-You do not have to worry about this then.
-But this package should be usable with targets other than Plone.
+Current Plone (5.2 and 6.0.0a1) do not use ``plone.autoinclude``.
+But you can still use it for your Plone project.
 
-To install ``plone.autoinclude``, first add it to your buildout::
+First add it to your buildout::
 
-    [buildout]
+    [instance]
     ...
     eggs =
         plone.autoinclude
     zcml =
-        plone.autoinclude-meta
+        plone.autoinclude.ploneinclude-meta
+        plone.autoinclude.ploneinclude
+        plone.autoinclude.ploneinclude-overrides
 
-and then run ``bin/buildout``.
+This will include three zcml files from the ``ploneinclude`` directory.
+It will do this:
 
-You may need to disable ``z3c.autoinclude``, as it does not seem useful to let them both run.
-In a ``meta.zcml`` file, add::
+- Disable the original z3c.autoinclude.
+- Load CMFPlone meta.zcml, so the order in which zcml is loaded stays mostly the same.
+- Load plone.autoinclude meta.zcml.
+- Automatically include the meta.zcml of all plone plugins.
+- Load CMFPlone configure.zcml.
+- Automatically include the configure.zcml of all plone plugins.
+- Load CMFPlone overrides.zcml.
+- Automatically include the overrides.zcml of all plone plugins.
 
-    <meta:provides feature="disable-autoinclude" />
 
-If the ``z3c.autoinclude`` package is present, it will see this and do nothing.
+For other frameworks
+--------------------
+
+You can take the above section as example, and take care of the following
+
+- Include the ``plone.autoinclude`` package in ``install_requires``.
+- In your meta.zcml load the meta.zcml of plone.autoinclude.
+- In your meta.zcml load the meta.zcml of your plugins:
+  ``<autoIncludePlugins target="your-framework" file="meta.zcml" />``
+- In your configure.zcml load the configure.zcml of your plugins:
+  ``<autoIncludePlugins target="your-framework" file="configure.zcml" />``
+- In your overrides.zcml load the meta.zcml of your plugins in override mode:
+  ``<autoIncludePluginsOverrides target="your-framework" file="meta.zcml" />``
+
+
+Inclusion in core Plone
+-----------------------
 
 For core Plone my intention would be to do this:
 
@@ -178,27 +200,26 @@ For core Plone my intention would be to do this:
 
     <autoIncludePluginsOverrides target="plone" file="overrides.zcml" />
 
-See also the ``package-includes`` directory in this repository and ``test-packages/example.ploneintegration``.
+See also ``src/plone/autoinclude/ploneinclude/`` and ``test-packages/example.ploneintegration``.
 And see `CMFPlone branch plone-autoinclude <https://github.com/plone/Products.CMFPlone/tree/plone-autoinclude>`_, based on 5.2.x.
 
 
 Installation with pip
 ---------------------
 
-Let's leave buildout completely out of the picture and only use pip, in this case with plone 5.2.3::
+Let's leave buildout completely out of the picture and only use pip, in this case with plone 5.2.5.
+We use the legacy resolver from pip, to avoid some possible problems that have nothing to do with autoinclude::
 
     # Create virtual environment in the current directory:
     python3.8 -mvenv .
-    # Install Plone:
-    bin/pip install -c https://dist.plone.org/release/5.2.3/constraints3.txt Products.CMFPlone
+    # Install Plone and Paste:
+    bin/pip install -c https://dist.plone.org/release/5.2.5/constraints.txt Products.CMFPlone Paste --use-deprecated legacy-resolver
     # Install plone.autoinclude from the current git checkout:
     bin/pip install -e .
-    # When I try bin/mkwsgiinstance it complains that Paste is missing.
-    # We could use waitress instead, but let's try Paste for now:
-    bin/pip install -c https://dist.plone.org/release/5.2.3/constraints3.txt Paste
+    # or 'bin/pip install plone.autoinclude' to get the latest from PyPI.
     # Create the Zope WSGI instance:
     bin/mkwsgiinstance -d . -u admin:admin
-    # Copy our zcml that disables z3c.autoinclude and enables our own:
+    # Copy our zcml that disables z3c.autoinclude and enables our own.
     cp -a package-includes etc/
     # Start Zope:
     bin/runwsgi -v etc/zope.ini
