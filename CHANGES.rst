@@ -9,6 +9,16 @@ Changelog
 
 .. towncrier release notes start
 
+1.0.0a2 (2021-10-20)
+--------------------
+
+Bug fixes:
+
+
+- Improved documentation, especially on how to include this.
+  Added zcml in a ploneinclude directory to make this easier for now.
+  [maurits] (#1)
+
 
 1.0.0a1 (2021-10-15)
 --------------------
