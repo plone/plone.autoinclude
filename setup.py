@@ -11,6 +11,7 @@ setup(
     # long_description: see metadata in setup.cfg
     # Get more from https://pypi.org/classifiers/
     classifiers=[
+        "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",
         "Framework :: Plone :: 5.2",
         "Framework :: Plone :: 6.0",
