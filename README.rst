@@ -10,10 +10,6 @@
     :target: https://pypi.org/project/plone.autoinclude/
     :alt: Latest Version
 
-.. image:: https://img.shields.io/pypi/status/plone.autoinclude.svg
-    :target: https://pypi.org/project/plone.autoinclude
-    :alt: Egg Status
-
 .. image:: https://img.shields.io/pypi/pyversions/plone.autoinclude.svg?style=plastic   :alt: Supported - Python Versions
 
 .. image:: https://img.shields.io/pypi/l/plone.autoinclude.svg
