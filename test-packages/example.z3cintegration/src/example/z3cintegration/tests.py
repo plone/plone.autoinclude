@@ -2,7 +2,8 @@ from . import dummy_plone
 from example.basetestpackage.integration_base import IntegrationTestCase
 from example.basetestpackage.utils import get_configuration_context
 from importlib import import_module
-from zope.configuration.xmlconfig import include, includeOverrides
+from zope.configuration.xmlconfig import include
+from zope.configuration.xmlconfig import includeOverrides
 
 import sys
 import unittest
