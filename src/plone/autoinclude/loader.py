@@ -132,24 +132,24 @@ def load_zcml_file(
     if package is None and context.package is not None:
         package = context.package
     if override:
-        logger.info(f"Loading {module_name}:{zcml} from {filename} in override mode.")
+        logger.debug(f"Loading {module_name}:{zcml} from {filename} in override mode.")
         # The package as third argument seems not needed because we have an absolute file name.
         # But it *is* needed when that file loads other relative files.
         includeOverrides(context, filename, package)
     else:
-        logger.info(f"Loading {module_name}:{zcml} from {filename}")
+        logger.debug(f"Loading {module_name}:{zcml} from {filename}")
         include(context, filename, package)
 
 
 def load_configure(context, filename, dists):
-    logger.info(f"Loading {filename} files.")
+    logger.debug(f"Loading {filename} files.")
     for module_name, package in dists.items():
         logger.debug(module_name)
         load_zcml_file(context, module_name, package, filename)
 
 
 def load_overrides(context, filename, dists):
-    logger.info(f"Loading {filename} files in override mode.")
+    logger.debug(f"Loading {filename} files in override mode.")
     for module_name, package in dists.items():
         logger.debug(module_name)
         load_zcml_file(context, module_name, package, "overrides.zcml", override=True)
