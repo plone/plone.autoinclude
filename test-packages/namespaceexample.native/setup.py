@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from setuptools import find_namespace_packages, setup
+from setuptools import find_namespace_packages
+from setuptools import setup
 
 
 setup(

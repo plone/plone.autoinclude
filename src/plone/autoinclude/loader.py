@@ -1,5 +1,8 @@
-from pkg_resources import iter_entry_points, resource_filename, working_set
-from zope.configuration.xmlconfig import include, includeOverrides
+from pkg_resources import iter_entry_points
+from pkg_resources import resource_filename
+from pkg_resources import working_set
+from zope.configuration.xmlconfig import include
+from zope.configuration.xmlconfig import includeOverrides
 
 import importlib
 import logging
