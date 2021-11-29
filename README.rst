@@ -144,9 +144,9 @@ First add it to your buildout::
 
     [instance]
     ...
-    eggs =
+    eggs +=
         plone.autoinclude
-    zcml =
+    zcml +=
         plone.autoinclude.ploneinclude-meta
         plone.autoinclude.ploneinclude
         plone.autoinclude.ploneinclude-overrides
