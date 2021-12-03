@@ -37,10 +37,10 @@ Compatibility
 -------------
 
 This is made for Python 3.6+.
-It works on Plone 5.2 and 6.0.
+Since Plone 6.0.0a2 it is included in core Plone.
+See `PLIP 3339 <https://github.com/plone/Products.CMFPlone/issues/3339>`_.
 
-It is intended (at least by some) to be used in core Plone 6.
-See "pre-PLIP" `3053 <https://github.com/plone/Products.CMFPlone/issues/3053>`_.
+It also works on Plone 5.2.
 
 
 For add-on authors
@@ -134,12 +134,11 @@ Comparison with ``z3c.autoinclude``
 In general, ``plone.autoinclude`` is a bit more modern, as it only started in 2020, and only supports Python 3.
 
 
-Inclusion in Plone now
-----------------------
+Usage in Plone 5.2
+------------------
 
-Current Plone (5.2 and 6.0.0a1) do not use ``plone.autoinclude``.
-But you can still use it for your Plone project.
-
+Since Plone 6.0.0a2 this is included in core, so nothing needs to be done there.
+If you want to use it in Plone 5.2, this is possible.
 First add it to your buildout::
 
     [instance]
@@ -177,31 +176,6 @@ You can take the above section as example, and take care of the following
   ``<autoIncludePlugins target="your-framework" file="configure.zcml" />``
 - In your overrides.zcml load the meta.zcml of your plugins in override mode:
   ``<autoIncludePluginsOverrides target="your-framework" file="meta.zcml" />``
-
-
-Inclusion in core Plone
------------------------
-
-For core Plone my intention would be to do this:
-
-- Remove code that loads the ``z3c.autoinclude`` package, mostly in ``Products.CMFPlone``.
-  Replace it with the ``plone.autoinclude`` variant.
-
-- In ``Products.CMFPlone/meta.zcml`` set::
-
-    <include package="plone.autoinclude" file="meta.zcml" />
-    <autoIncludePlugins target="plone" file="meta.zcml" />
-
-- In ``Products.CMFPlone/configure.zcml`` set::
-
-    <autoIncludePlugins target="plone" file="configure.zcml" />
-
-- In ``Products.CMFPlone/overrides.zcml`` set::
-
-    <autoIncludePluginsOverrides target="plone" file="overrides.zcml" />
-
-See also ``src/plone/autoinclude/ploneinclude/`` and ``test-packages/example.ploneintegration``.
-And see `CMFPlone branch plone-autoinclude <https://github.com/plone/Products.CMFPlone/tree/plone-autoinclude>`_, based on 5.2.x.
 
 
 Installation with pip
