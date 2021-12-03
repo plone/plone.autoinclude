@@ -9,6 +9,15 @@ Changelog
 
 .. towncrier release notes start
 
+1.0.0a3 (2021-12-03)
+--------------------
+
+Bug fixes:
+
+
+- Decrease verbosity when loading packages (#11)
+
+
 1.0.0a2 (2021-10-20)
 --------------------
 
