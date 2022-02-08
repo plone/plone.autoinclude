@@ -14,6 +14,11 @@ class TestIntegration(IntegrationTestCase, unittest.TestCase):
     }
     configure_files = {
         "example.ploneintegration": ["configure.zcml"],
+        "example.plone_dash_addon": [
+            "configure.zcml",
+            "permissions.zcml",
+            "browser/configure.zcml",
+        ],
         "example.ploneaddon": [
             "configure.zcml",
             "permissions.zcml",
