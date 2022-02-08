@@ -30,7 +30,7 @@ def load_z3c_packages(target=""):
         # we can include it.
         if target and ep.module_name != target:
             continue
-        module_name = ep.dist.project_name
+        module_name = ep.dist.project_name.replace("-", "_")
         if module_name not in _known_module_names:
             try:
                 dist = importlib.import_module(module_name)
