@@ -4,7 +4,7 @@ import unittest
 
 
 class TestPackage(PackageTestCase, unittest.TestCase):
-    project_name = "example.plone-dash-addon"
+    project_name = "example.plone_dash_addon"
     meta_files = []
     configure_files = ["configure.zcml", "permissions.zcml", "browser/configure.zcml"]
     overrides_files = []

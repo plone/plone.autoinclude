@@ -15,6 +15,6 @@
 
   <include file="permissions.zcml" />
 
-  <!-- FOR TESTS: This is configure.zcml from example.plone-dash-addon. -->
+  <!-- FOR TESTS: This is configure.zcml from example.plone_dash_addon. -->
 
 </configure>
