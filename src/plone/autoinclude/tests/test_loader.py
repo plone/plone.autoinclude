@@ -61,10 +61,11 @@ class TestLoader(unittest.TestCase):
             "example.multipleeps",
         ]:
             self.assertIn(package, packages.keys())
+
         package = packages["example.ploneaddon"]
         import example.ploneaddon
-
         self.assertEqual(package, example.ploneaddon)
+
 
     def test_load_own_packages(self):
         from plone.autoinclude.loader import load_own_packages
@@ -73,12 +74,17 @@ class TestLoader(unittest.TestCase):
         for package in [
             "example.somethingelse2",
             "example.multipleeps",
+            "example.plone_dash_addon",
         ]:
             self.assertIn(package, packages.keys())
         package = packages["example.somethingelse2"]
         import example.somethingelse2
-
         self.assertEqual(package, example.somethingelse2)
+
+        package = packages["example.plone_dash_addon"]
+        import example.plone_dash_addon
+        self.assertEqual(package, example.plone_dash_addon)
+
 
     def test_get_zcml_file(self):
         from plone.autoinclude.loader import get_zcml_file

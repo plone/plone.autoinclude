@@ -78,7 +78,7 @@ def load_own_packages(target=""):
             if target and eps["target"].module_name != target:
                 # entry point defines target X but we only want target Y.
                 continue
-            module_name = wsdist.project_name
+            module_name = wsdist.project_name.replace("-", "_")
         if "module" in eps:
             # We could load the dist with ep.load(), but we do it differently.
             module_name = eps["module"].module_name
