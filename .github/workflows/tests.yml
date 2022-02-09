@@ -4,6 +4,8 @@ name: tests
 
 on:
   push:
+    branches:
+      - main
   pull_request:
   schedule:
     - cron: '13 7 * * 0'  # run once a week on Sunday
