@@ -9,6 +9,15 @@ Changelog
 
 .. towncrier release notes start
 
+1.0.0a4 (2022-02-23)
+--------------------
+
+Bug fixes:
+
+
+- Replace dash with lowdash in project_name, as Python Project are normally divided by dash and modul name uses lowdash [MrTango] (#16)
+
+
 1.0.0a3 (2021-12-03)
 --------------------
 
