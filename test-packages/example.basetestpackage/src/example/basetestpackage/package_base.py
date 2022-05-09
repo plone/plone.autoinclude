@@ -1,3 +1,4 @@
+from .utils import allow_module_not_found_error
 from .utils import get_configuration_context
 from importlib import import_module
 
@@ -62,10 +63,11 @@ class PackageTestCase:
     def test_load_packages(self):
         from plone.autoinclude.loader import load_packages
 
-        packages = load_packages()
+        with allow_module_not_found_error():
+            packages = load_packages()
         if self.module_name:
-            # Module name differs from project name.
             # Only module names get in the packages list.
+            # Module name differs from project name.
             self.assertNotIn(self.project_name, packages.keys())
             if not self.uses_plone_autoinclude:
                 # The package uses the old z3c.autoinclude.

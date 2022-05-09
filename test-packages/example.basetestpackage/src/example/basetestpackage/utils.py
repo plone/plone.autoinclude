@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from zope.configuration.config import ConfigurationMachine
 from zope.configuration.xmlconfig import registerCommonDirectives
 
@@ -17,3 +18,18 @@ def get_configuration_context(package=None):
         # When you set context.package, context.path(filename) works nicely.
         context.package = package
     return context
+
+
+@contextmanager
+def allow_module_not_found_error():
+    from plone.autoinclude import loader
+
+    # Temporarily allow module not found error.
+    orig = loader.AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR
+    loader.AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR = True
+
+    try:
+        yield
+    finally:
+        # restore
+        loader.AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR = orig

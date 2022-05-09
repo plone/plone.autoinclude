@@ -23,6 +23,13 @@ PROJECTS_DIR = os.path.realpath(os.path.join(directory, test_dir))
 
 class TestLoader(unittest.TestCase):
     def setUp(self):
+        from plone.autoinclude import loader
+
+        # Allow module not found errors in these tests.
+        self._orig_AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR = \
+            loader.AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR
+        loader.AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR = True
+
         workingset = pkg_resources.working_set
         self.workingdir = os.getcwd()
         self.stored_syspath = copy(sys.path)
@@ -46,6 +53,12 @@ class TestLoader(unittest.TestCase):
         os.chdir(self.workingdir)
 
     def tearDown(self):
+        from plone.autoinclude import loader
+
+        # Restore original setting.
+        loader.AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR = \
+            self._orig_AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR
+
         os.chdir(self.workingdir)
         sys.path = self.stored_syspath
         workingset = pkg_resources.working_set
