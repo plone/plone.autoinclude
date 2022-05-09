@@ -26,9 +26,8 @@ class TestLoader(unittest.TestCase):
         from plone.autoinclude import loader
 
         # Allow module not found errors in these tests.
-        self._orig_AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR = \
-            loader.AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR
-        loader.AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR = True
+        self._orig_ALLOW_MODULE_NOT_FOUND_ALL = loader.ALLOW_MODULE_NOT_FOUND_ALL
+        loader.ALLOW_MODULE_NOT_FOUND_ALL = True
 
         workingset = pkg_resources.working_set
         self.workingdir = os.getcwd()
@@ -56,8 +55,7 @@ class TestLoader(unittest.TestCase):
         from plone.autoinclude import loader
 
         # Restore original setting.
-        loader.AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR = \
-            self._orig_AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR
+        loader.ALLOW_MODULE_NOT_FOUND_ALL = self._orig_ALLOW_MODULE_NOT_FOUND_ALL
 
         os.chdir(self.workingdir)
         sys.path = self.stored_syspath

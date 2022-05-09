@@ -105,6 +105,40 @@ You must specify at least one option, otherwise the entry point does not exist.
 
 ``module``
     Use this when your package name is different from what you import in Python.
+    See also the next section.
+
+
+Different project and module name
+---------------------------------
+
+Usually the project name of an add-on (what is in ``setup.py`` or ``setup.cfg``) is the same as how you would import it in Python code.
+It could be different though.
+In that case, you may get a ``ModuleNotFoundError`` on startup: ``plone.autoinclude`` tries to import the project name and this fails.
+
+The easiest way to solve this, is to switch from ``z3c.autoinclude.plugin`` to ``plone.autoinclude.plugin``, if you have not done so already,
+and specify the module.
+In ``setup.py``::
+
+    setup(
+        name="example.different2",
+        entry_points="""
+        [plone.autoinclude.plugin]
+        module = example.somethingelse2
+        """,
+    )
+
+If you must still support Plone 5.2 and are tied to ``z3c.autoinclude.plugin``, or if you cannot edit the problematic package, you can work around it.
+You set an environment variable ``AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR``.
+To accept ``ModuleNotFoundError`` in all packages::
+
+    export AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR=1
+
+To accept ``ModuleNotFoundError`` only in specific packages, use a comma-separated list of project names, with or without spaces::
+
+    export AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR=example.different,example.different2
+
+In the logs you will see a traceback so you can investigate, but startup continues.
+You should make sure the zcml of this package is loaded in some other way.
 
 
 Comparison with ``z3c.autoinclude``

@@ -21,15 +21,20 @@ def get_configuration_context(package=None):
 
 
 @contextmanager
-def allow_module_not_found_error():
+def allow_module_not_found_error(allowed):
     from plone.autoinclude import loader
 
-    # Temporarily allow module not found error.
-    orig = loader.AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR
-    loader.AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR = True
-
+    # save original settings
+    orig_all = loader.ALLOW_MODULE_NOT_FOUND_ALL
+    orig_set = loader.ALLOW_MODULE_NOT_FOUND_SET
+    # Temporarily allow module not found error for only the
+    # packages in the allowed set.
+    loader.ALLOW_MODULE_NOT_FOUND_ALL = False
+    loader.ALLOW_MODULE_NOT_FOUND_SET = allowed
+    # breakpoint()
     try:
         yield
     finally:
         # restore
-        loader.AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR = orig
+        loader.ALLOW_MODULE_NOT_FOUND_ALL = orig_all
+        loader.ALLOW_MODULE_NOT_FOUND_SET = orig_set
