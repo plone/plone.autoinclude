@@ -1,3 +1,4 @@
+from .utils import allow_module_not_found_error
 from .utils import get_configuration_context
 from importlib import import_module
 
@@ -36,6 +37,10 @@ class PackageTestCase:
     project_name = ""
     # If module name differs from project name, fill this in:
     module_name = ""
+    # Accept ModuleNotFound errors for some projects with different module names.
+    # This should be same list for all test packages, and should contain all
+    # test packages with the old z3c.autoinclude.plugin that have this problem.
+    allow_module_not_found = {"example.different"}
     # Does the package use plone.autoinclude (True) or the old z3c.autoinclude (False)?
     # Attribute is only used when we have a different module_name.
     uses_plone_autoinclude = True
@@ -61,10 +66,23 @@ class PackageTestCase:
     @unittest.skipIf(not HAS_PLONE_AUTOINCLUDE, "plone.autoinclude missing")
     def test_load_packages(self):
         from plone.autoinclude.loader import load_packages
+        from plone.autoinclude import loader
 
-        packages = load_packages()
-        if self.module_name:
+        # Empty the known module names, so projects are loaded again.
+        loader._known_module_names = {}
+        if self.module_name and not self.uses_plone_autoinclude:
             # Module name differs from project name.
+            # Allowing ModuleNotFound in all known ones except our own,
+            # should fail, so the user knows something is wrong.
+            allowed = self.allow_module_not_found - {self.project_name}
+            with allow_module_not_found_error(allowed):
+                with self.assertRaises(ModuleNotFoundError):
+                    packages = load_packages()
+
+        # User can allow some modules to have ModuleNotFoundErrors.
+        with allow_module_not_found_error(self.allow_module_not_found):
+            packages = load_packages()
+        if self.module_name:
             # Only module names get in the packages list.
             self.assertNotIn(self.project_name, packages.keys())
             if not self.uses_plone_autoinclude:

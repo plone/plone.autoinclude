@@ -15,6 +15,21 @@ logger = logging.getLogger(__name__)
 # Dictionary of project names and packages that we have already imported.
 _known_module_names = {}
 
+# Maybe allow ModuleNotFoundError.
+# This can be a boolean (0/1) or a list of project names (from setup.py),
+# separated by comma.
+AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR = os.getenv(
+    "AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR", ""
+)
+ALLOW_MODULE_NOT_FOUND_SET = set()
+ALLOW_MODULE_NOT_FOUND_ALL = False
+try:
+    ALLOW_MODULE_NOT_FOUND_ALL = bool(int(AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR))
+except (ValueError, TypeError):
+    _allowed = AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR.replace(" ", "").split(",")
+    if _allowed:
+        ALLOW_MODULE_NOT_FOUND_SET = set(_allowed)
+
 
 def load_z3c_packages(target=""):
     """Load packages from the z3c.autoinclude.plugin entry points.
@@ -37,7 +52,25 @@ def load_z3c_packages(target=""):
             except ModuleNotFoundError:
                 # Note: this may happen a lot, at least for z3c.autoinclude,
                 # because the project name may not be the same as the package/module.
-                logger.exception(f"Could not import {module_name}.")
+                # If we accept it, we may hide real errors though:
+                # the module may be there but have an ImportError.
+                if (
+                    not ALLOW_MODULE_NOT_FOUND_ALL
+                    and module_name not in ALLOW_MODULE_NOT_FOUND_SET
+                ):
+                    logger.error(
+                        f"Could not import {module_name}. Set environment variable "
+                        "AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR=1 if you want to "
+                        f"allow this. Or set it to '{module_name}' to only allow for "
+                        "this project. Can be a comma-separated list of project "
+                        "names. Or replace the z3c.autoinclude.plugin entry point of "
+                        "this project with plone.autoinclude.plugin and a module name."
+                    )
+                    raise
+                logger.exception(
+                    f"Could not import {module_name}. Accepted due to "
+                    "AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR environment variable."
+                )
                 _known_module_names[module_name] = None
                 continue
             _known_module_names[module_name] = dist
