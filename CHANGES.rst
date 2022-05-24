@@ -9,6 +9,19 @@ Changelog
 
 .. towncrier release notes start
 
+1.0.0a5 (2022-05-24)
+--------------------
+
+New features:
+
+
+- Raise an exception when a module is not found.
+  When environment variable ``AUTOINCLUDE_ALLOW_MODULE_NOT_FOUND_ERROR=1`` is set, we log an error and continue.
+  To accept ``ModuleNotFoundError`` only in specific packages, use a comma-separated list of project names, with or without spaces.
+  See `issue 19 <https://github.com/plone/plone.autoinclude/issues/19>`_.
+  [maurits] (#19)
+
+
 1.0.0a4 (2022-02-23)
 --------------------
 
