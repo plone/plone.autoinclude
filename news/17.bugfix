@@ -1,0 +1,2 @@
+Use setuptools/pkg_resources regex to compute safe name for a project.
+[gforcada]
