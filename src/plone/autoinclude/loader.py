@@ -7,10 +7,15 @@ from zope.configuration.xmlconfig import includeOverrides
 import importlib
 import logging
 import os
+import re
 
 
 logger = logging.getLogger(__name__)
 
+# copied from setuptools, see
+# https://github.com/pypa/setuptools/blob/6f7dd7c12ceffa2aefe28c2fbafbad2273980b2b/pkg_resources/__init__.py#L1328
+# and also https://github.com/plone/plone.autoinclude/issues/17
+SAFE_NAME_RE = re.compile('[^A-Za-z0-9.]+')
 
 # Dictionary of project names and packages that we have already imported.
 _known_module_names = {}
@@ -45,7 +50,7 @@ def load_z3c_packages(target=""):
         # we can include it.
         if target and ep.module_name != target:
             continue
-        module_name = ep.dist.project_name.replace("-", "_")
+        module_name = SAFE_NAME_RE.sub(ep.dist.project_name,'-')
         if module_name not in _known_module_names:
             try:
                 dist = importlib.import_module(module_name)
@@ -111,7 +116,7 @@ def load_own_packages(target=""):
             if target and eps["target"].module_name != target:
                 # entry point defines target X but we only want target Y.
                 continue
-            module_name = wsdist.project_name.replace("-", "_")
+            module_name = SAFE_NAME_RE.sub(wsdist.project_name, '-')
         if "module" in eps:
             # We could load the dist with ep.load(), but we do it differently.
             module_name = eps["module"].module_name
