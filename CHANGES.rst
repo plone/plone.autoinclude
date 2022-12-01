@@ -9,6 +9,16 @@ Changelog
 
 .. towncrier release notes start
 
+1.0.0 (2022-12-01)
+------------------
+
+Bug fixes:
+
+
+- Use setuptools/pkg_resources regex to compute safe name for a project.
+  [gforcada] (#17)
+
+
 1.0.0a5 (2022-05-24)
 --------------------
 
