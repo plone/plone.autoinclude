@@ -7,7 +7,6 @@ from zope.configuration.xmlconfig import includeOverrides
 import importlib
 import logging
 import os
-import re
 
 
 logger = logging.getLogger(__name__)
