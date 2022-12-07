@@ -18,24 +18,26 @@ jobs:
       matrix:
         config:
         # [Python version, tox env]
-        - ["3.8",   "lint"]
-        - ["3.6",   "py36-unit"]
-        - ["3.7",   "py37-unit"]
-        - ["3.8",   "py38-unit"]
-        - ["3.9",   "py39-unit"]
-        - ["3.10",   "py310-unit"]
-        - ["pypy3", "pypy3-unit"]
-        - ["3.6",   "py36-integration"]
-        - ["3.7",   "py37-integration"]
-        - ["3.8",   "py38-integration"]
-        - ["3.9",   "py39-integration"]
-        - ["3.10",   "py310-integration"]
-        - ["pypy3", "pypy3-integration"]
-        - ["3.8",   "buildout2"]
-        - ["3.8",   "buildout3"]
-        - ["3.8",   "coverage"]
+        - ["3.8", "lint", "ubuntu-latest"]
+        - ["3.6", "py36-unit", "ubuntu-20.04"]
+        - ["3.7", "py37-unit", "ubuntu-latest"]
+        - ["3.8", "py38-unit", "ubuntu-latest"]
+        - ["3.9", "py39-unit", "ubuntu-latest"]
+        - ["3.10", "py310-unit", "ubuntu-latest"]
+        - ["3.11", "py311-unit", "ubuntu-latest"]
+        - ["pypy3", "pypy3-unit", "ubuntu-20.04"]
+        - ["3.6", "py36-integration", "ubuntu-20.04"]
+        - ["3.7", "py37-integration", "ubuntu-latest"]
+        - ["3.8", "py38-integration", "ubuntu-latest"]
+        - ["3.9", "py39-integration", "ubuntu-latest"]
+        - ["3.10", "py310-integration", "ubuntu-latest"]
+        - ["3.11", "py311-integration", "ubuntu-latest"]
+        - ["pypy3", "pypy3-integration", "ubuntu-20.04"]
+        - ["3.8", "buildout2", "ubuntu-latest"]
+        - ["3.8", "buildout3", "ubuntu-latest"]
+        - ["3.8", "coverage", "ubuntu-latest"]
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.config[2] }}
     name: ${{ matrix.config[1] }}
     steps:
     - uses: actions/checkout@v2
