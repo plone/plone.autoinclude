@@ -9,6 +9,15 @@ Changelog
 
 .. towncrier release notes start
 
+1.0.1 (2022-12-10)
+------------------
+
+Bug fixes:
+
+
+- Revert "Use setuptools/pkg_resources regex to compute safe name for a project" to fix an error importing packages with dashes. [davisagli] (#22)
+
+
 1.0.0 (2022-12-01)
 ------------------
 
