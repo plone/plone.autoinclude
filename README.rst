@@ -6,12 +6,6 @@
     :target: https://coveralls.io/github/plone/plone.autoinclude?branch=main
     :alt: Coveralls
 
-.. image:: https://img.shields.io/pypi/v/plone.autoinclude.svg
-    :target: https://pypi.org/project/plone.autoinclude/
-    :alt: Latest Version
-
-.. image:: https://img.shields.io/pypi/pyversions/plone.autoinclude.svg?style=plastic   :alt: Supported - Python Versions
-
 .. image:: https://img.shields.io/pypi/l/plone.autoinclude.svg
     :target: https://pypi.org/project/plone.autoinclude/
     :alt: License
