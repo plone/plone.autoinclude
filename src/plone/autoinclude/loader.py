@@ -47,7 +47,13 @@ def load_z3c_packages(target=""):
         module_name = ep.dist.project_name.replace("-", "_")
         if module_name not in _known_module_names:
             try:
-                dist = importlib.import_module(module_name)
+                # See https://github.com/pypa/setuptools/issues/4853
+                # and https://github.com/plone/plone.autoinclude/issues/25
+                try:
+                    dist = importlib.import_module(module_name)
+                except ModuleNotFoundError:
+                    module_name = module_name.replace("_", ".")
+                    dist = importlib.import_module(module_name)
             except ModuleNotFoundError:
                 # Note: this may happen a lot, at least for z3c.autoinclude,
                 # because the project name may not be the same as the package/module.
