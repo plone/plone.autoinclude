@@ -52,8 +52,7 @@ def load_z3c_packages(target=""):
                 try:
                     dist = importlib.import_module(module_name)
                 except ModuleNotFoundError:
-                    module_name = module_name.replace("_", ".")
-                    dist = importlib.import_module(module_name)
+                    dist = importlib.import_module(module_name.replace("_", "."))
             except ModuleNotFoundError:
                 # Note: this may happen a lot, at least for z3c.autoinclude,
                 # because the project name may not be the same as the package/module.
