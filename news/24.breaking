@@ -1,0 +1,4 @@
+Support Plone 6.0, 6.1, 6.2, Python 3.9-3.13, and Buildout 4.
+Drop support for older Plone, Python and Buildout versions.
+Drop support for PyPy.  Technically it may still work, but we no longer test it.  It is irrelevant for Plone.
+[maurits]
