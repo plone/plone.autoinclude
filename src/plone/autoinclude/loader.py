@@ -1,3 +1,4 @@
+from importlib.metadata import distribution
 from pkg_resources import iter_entry_points
 from pkg_resources import resource_filename
 from pkg_resources import working_set
@@ -30,6 +31,27 @@ except (ValueError, TypeError):
         ALLOW_MODULE_NOT_FOUND_SET = set(_allowed)
 
 
+def _get_module_name_from_project_name(project_name):
+    """Get module name from project_name.
+
+    We got the project_name from an entry point, so there should be a
+    distribution that we can find with this name.
+
+    From there, we want to get a module or package name.
+    If we are lucky, this is the same as the project name, but it can differ.
+
+    This must be something we can import.  So we at least replace any dashes
+    with underscores.
+    """
+    dist = distribution(project_name)
+    # In Python 3.9, dist.name does not exist, or maybe not always.
+    if hasattr(dist, "name"):
+        dist_name = dist.name
+    else:
+        dist_name = dist.metadata["Name"]
+    return dist_name.replace("-", "_")
+
+
 def load_z3c_packages(target=""):
     """Load packages from the z3c.autoinclude.plugin entry points.
 
@@ -44,15 +66,19 @@ def load_z3c_packages(target=""):
         # we can include it.
         if target and ep.module_name != target:
             continue
-        module_name = ep.dist.project_name.replace("-", "_")
+        # We should always be able to get the distribution.
+        # Otherwise: how could we have an entry point?
+        module_name = _get_module_name_from_project_name(ep.dist.project_name)
         if module_name not in _known_module_names:
             try:
-                dist = importlib.import_module(module_name)
+                module = importlib.import_module(module_name)
             except ModuleNotFoundError:
                 # Note: this may happen a lot, at least for z3c.autoinclude,
                 # because the project name may not be the same as the package/module.
                 # If we accept it, we may hide real errors though:
                 # the module may be there but have an ImportError.
+                # Second note: I am not sure how much this part is still needed
+                # now that we call 'distribution(ep.dist.project_name)'.
                 if (
                     not ALLOW_MODULE_NOT_FOUND_ALL
                     and module_name not in ALLOW_MODULE_NOT_FOUND_SET
@@ -72,10 +98,10 @@ def load_z3c_packages(target=""):
                 )
                 _known_module_names[module_name] = None
                 continue
-            _known_module_names[module_name] = dist
-        dist = _known_module_names[module_name]
-        if dist is not None:
-            dists[module_name] = dist
+            _known_module_names[module_name] = module
+        module = _known_module_names[module_name]
+        if module is not None:
+            dists[module_name] = module
     return dists
 
 
@@ -110,7 +136,9 @@ def load_own_packages(target=""):
             if target and eps["target"].module_name != target:
                 # entry point defines target X but we only want target Y.
                 continue
-            module_name = wsdist.project_name.replace("-", "_")
+            # We should always be able to get the distribution.
+            # Otherwise: how could we have an entry point?
+            module_name = _get_module_name_from_project_name(wsdist.project_name)
         if "module" in eps:
             # We could load the dist with ep.load(), but we do it differently.
             module_name = eps["module"].module_name
@@ -121,11 +149,11 @@ def load_own_packages(target=""):
             )
         if module_name not in _known_module_names:
             # We could try/except ModuleNotFoundError, but this is an unexpected error.
-            dist = importlib.import_module(module_name)
-            _known_module_names[module_name] = dist
+            module = importlib.import_module(module_name)
+            _known_module_names[module_name] = module
         else:
-            dist = _known_module_names[module_name]
-        dists[module_name] = dist
+            module = _known_module_names[module_name]
+        dists[module_name] = module
     return dists
 
 
