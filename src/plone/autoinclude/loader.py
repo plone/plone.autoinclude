@@ -8,6 +8,13 @@ import logging
 import os
 
 
+try:
+    from importlib.metadata import entry_points
+except ImportError:
+    # BBB: Python 3.9 does not have yet the importlib.metadata module
+    from importlib_metadata import entry_points
+
+
 logger = logging.getLogger(__name__)
 
 # Dictionary of project names and packages that we have already imported.
@@ -37,12 +44,24 @@ def load_z3c_packages(target=""):
     """
     dists = {}
 
-    for ep in importlib.metadata.entry_points(group="z3c.autoinclude.plugin"):
+    try:
+        autoinclude_entry_points = entry_points(group="z3c.autoinclude.plugin")
+    except TypeError:
+        # BBB: Python 3.9 compatibility
+        autoinclude_entry_points = entry_points().get("z3c.autoinclude.plugin", [])
+
+    for ep in autoinclude_entry_points:
+
+        try:
+            module_name = ep.dist.name
+        except AttributeError:
+            # BBB: Python 3.9 compatibility
+            module_name = ep.name
+
         # If we look for target 'plone' then only consider entry points
         # that are registered for this target (module name).
         # But if the entry point is not registered for a specific target,
         # we can include it.
-        module_name = ep.dist.name
         if target and module_name != target:
             continue
 

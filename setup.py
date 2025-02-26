@@ -4,6 +4,18 @@
 from setuptools import find_packages
 from setuptools import setup
 
+import sys
+
+
+requirements = [
+    "setuptools",
+    "zope.configuration",
+]
+
+# Python 3.9 does not have yet the importlib.metadata module
+if sys.version_info < (3, 10):
+    requirements.append("importlib-metadata")
+
 
 setup(
     name="plone.autoinclude",
@@ -45,8 +57,5 @@ setup(
     include_package_data=True,
     zip_safe=False,
     python_requires=">=3.9",
-    install_requires=[
-        "setuptools",
-        "zope.configuration",
-    ],
+    install_requires=requirements,
 )
