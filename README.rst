@@ -30,11 +30,10 @@ Features
 Compatibility
 -------------
 
-This is made for Python 3.6+.
-Since Plone 6.0.0a2 it is included in core Plone.
+Since Plone 6.0.0a2 this package is included in core Plone.
 See `PLIP 3339 <https://github.com/plone/Products.CMFPlone/issues/3339>`_.
 
-It also works on Plone 5.2.
+The 1.x versions also work on Plone 5.2, on Python 3.6+.
 
 
 For add-on authors
@@ -109,6 +108,8 @@ Usually the project name of an add-on (what is in ``setup.py`` or ``setup.cfg``)
 It could be different though.
 In that case, you may get a ``ModuleNotFoundError`` on startup: ``plone.autoinclude`` tries to import the project name and this fails.
 
+This may happen more often since ``setuptools`` 75.8.1, which changed some name handling to be in line with the standards in several packaging-related PEPs (Python Enhancement Proposals).
+
 The easiest way to solve this, is to switch from ``z3c.autoinclude.plugin`` to ``plone.autoinclude.plugin``, if you have not done so already,
 and specify the module.
 In ``setup.py``::
@@ -165,66 +166,22 @@ In general, ``plone.autoinclude`` is a bit more modern, as it only started in 20
 Usage in Plone 5.2
 ------------------
 
-Since Plone 6.0.0a2 this is included in core, so nothing needs to be done there.
-If you want to use it in Plone 5.2, this is possible.
-First add it to your buildout::
-
-    [instance]
-    ...
-    eggs +=
-        plone.autoinclude
-    zcml +=
-        plone.autoinclude.ploneinclude-meta
-        plone.autoinclude.ploneinclude
-        plone.autoinclude.ploneinclude-overrides
-
-This will include three zcml files from the ``ploneinclude`` directory.
-It will do this:
-
-- Disable the original z3c.autoinclude.
-- Load CMFPlone meta.zcml, so the order in which zcml is loaded stays mostly the same.
-- Load plone.autoinclude meta.zcml.
-- Automatically include the meta.zcml of all plone plugins.
-- Load CMFPlone configure.zcml.
-- Automatically include the configure.zcml of all plone plugins.
-- Load CMFPlone overrides.zcml.
-- Automatically include the overrides.zcml of all plone plugins.
+For instructions on how to use this in Plone 5.2, see the ``README.rst`` of any 1.x version of this package.
 
 
 For other frameworks
 --------------------
 
-You can take the above section as example, and take care of the following
+If you want to use this in a framework that is built on top of Zope, but is not Plone, you need to take care of the following:
 
 - Include the ``plone.autoinclude`` package in ``install_requires``.
-- In your meta.zcml load the meta.zcml of plone.autoinclude.
-- In your meta.zcml load the meta.zcml of your plugins:
+- In your ``meta.zcml`` load the ``meta.zcml`` of ``plone.autoinclude``.
+- In your ``meta.zcml`` load the ``meta.zcml`` of your plugins:
   ``<autoIncludePlugins target="your-framework" file="meta.zcml" />``
-- In your configure.zcml load the configure.zcml of your plugins:
+- In your ``configure.zcml`` load the ``configure.zcml`` of your plugins:
   ``<autoIncludePlugins target="your-framework" file="configure.zcml" />``
-- In your overrides.zcml load the meta.zcml of your plugins in override mode:
+- In your ``overrides.zcml`` load the ``meta.zcml`` of your plugins in override mode:
   ``<autoIncludePluginsOverrides target="your-framework" file="meta.zcml" />``
-
-
-Installation with pip
----------------------
-
-Let's leave buildout completely out of the picture and only use pip, in this case with plone 5.2.5.
-We use the legacy resolver from pip, to avoid some possible problems that have nothing to do with autoinclude::
-
-    # Create virtual environment in the current directory:
-    python3.8 -mvenv .
-    # Install Plone and Paste:
-    bin/pip install -c https://dist.plone.org/release/5.2.5/constraints.txt Products.CMFPlone Paste --use-deprecated legacy-resolver
-    # Install plone.autoinclude from the current git checkout:
-    bin/pip install -e .
-    # or 'bin/pip install plone.autoinclude' to get the latest from PyPI.
-    # Create the Zope WSGI instance:
-    bin/mkwsgiinstance -d . -u admin:admin
-    # Copy our zcml that disables z3c.autoinclude and enables our own.
-    cp -a package-includes etc/
-    # Start Zope:
-    bin/runwsgi -v etc/zope.ini
 
 
 Contribute or get support
