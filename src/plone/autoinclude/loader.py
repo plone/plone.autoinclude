@@ -1,7 +1,7 @@
 from importlib.metadata import distribution
+from importlib.metadata import distributions
 from importlib.resources import files
 from pkg_resources import iter_entry_points
-from pkg_resources import working_set
 from zope.configuration.xmlconfig import include
 from zope.configuration.xmlconfig import includeOverrides
 
@@ -121,27 +121,33 @@ def load_own_packages(target=""):
     and it must have a value.
     """
     dists = {}
-    for wsdist in working_set:
-        eps = wsdist.get_entry_map("plone.autoinclude.plugin")
-        if not bool(eps):
+    for dist_obj in distributions():
+        eps = dist_obj.entry_points.select(group="plone.autoinclude.plugin")
+        if not eps:
             continue
-        # If we look for target 'plone' then only consider entry points
-        # that are registered for this target (module name).
-        # But if the entry point is not registered for a specific target,
-        # we can include it.  The biggest reason for doing this,
-        # is that I first thought you could not specify both
-        # target and module at the same time.
         module_name = None
-        if "target" in eps:
-            if target and eps["target"].module_name != target:
-                # entry point defines target X but we only want target Y.
-                continue
-            # We should always be able to get the distribution.
-            # Otherwise: how could we have an entry point?
-            module_name = _get_module_name_from_project_name(wsdist.project_name)
-        if "module" in eps:
-            # We could load the dist with ep.load(), but we do it differently.
-            module_name = eps["module"].module_name
+        this_target = True
+        for ep in eps:
+            # If we look for target 'plone' then only consider entry points
+            # that are registered for this target (module name).
+            # But if the entry point is not registered for a specific target,
+            # we can include it.  The biggest reason for doing this,
+            # is that I first thought you could not specify both
+            # target and module at the same time.
+            if ep.name == "target":
+                if target and ep.value != target:
+                    # entry point defines target X but we only want target Y.
+                    this_target = False
+                    break
+                # We should always be able to get the distribution.
+                # Otherwise: how could we have an entry point?
+                if module_name is None:
+                    module_name = _get_module_name_from_project_name(dist_obj.name)
+            if ep.name == "module":
+                # We could load the dist with ep.load(), but we do it differently.
+                module_name = ep.value
+        if not this_target:
+            continue
         if module_name is None:  # pragma: no cover
             # We could log a warning, but really this is an error.
             raise ValueError(
