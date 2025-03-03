@@ -1,7 +1,7 @@
 from importlib.metadata import distribution
 from importlib.metadata import distributions
+from importlib.metadata import entry_points
 from importlib.resources import files
-from pkg_resources import iter_entry_points
 from zope.configuration.xmlconfig import include
 from zope.configuration.xmlconfig import includeOverrides
 
@@ -59,16 +59,16 @@ def load_z3c_packages(target=""):
     This returns a dictionary of package names and packages.
     """
     dists = {}
-    for ep in iter_entry_points(group="z3c.autoinclude.plugin"):
+    for ep in entry_points().select(group="z3c.autoinclude.plugin"):
         # If we look for target 'plone' then only consider entry points
         # that are registered for this target (module name).
         # But if the entry point is not registered for a specific target,
         # we can include it.
-        if target and ep.module_name != target:
+        if target and ep.name == "target" and ep.value != target:
             continue
         # We should always be able to get the distribution.
         # Otherwise: how could we have an entry point?
-        module_name = _get_module_name_from_project_name(ep.dist.project_name)
+        module_name = _get_module_name_from_project_name(ep.dist.name)
         if module_name not in _known_module_names:
             try:
                 module = importlib.import_module(module_name)
