@@ -1,6 +1,6 @@
 from importlib.metadata import distribution
+from importlib.resources import files
 from pkg_resources import iter_entry_points
-from pkg_resources import resource_filename
 from pkg_resources import working_set
 from zope.configuration.xmlconfig import include
 from zope.configuration.xmlconfig import includeOverrides
@@ -171,7 +171,7 @@ def load_packages(target=""):
 
 def get_zcml_file(module_name, zcml="configure.zcml"):
     try:
-        filename = resource_filename(module_name, zcml)
+        filename = str(files(module_name) / zcml)
     except ModuleNotFoundError:
         # Note: this may happen a lot, at least for z3c.autoinclude,
         # because the project name may not be the same as the package/module.
