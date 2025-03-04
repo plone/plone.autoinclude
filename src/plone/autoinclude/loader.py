@@ -1,6 +1,5 @@
 from importlib.metadata import distribution
 from importlib.metadata import distributions
-from importlib.metadata import entry_points
 from importlib.resources import files
 from zope.configuration.xmlconfig import include
 from zope.configuration.xmlconfig import includeOverrides
@@ -8,6 +7,13 @@ from zope.configuration.xmlconfig import includeOverrides
 import importlib
 import logging
 import os
+import sys
+
+
+if sys.version_info.major == 3 and sys.version_info.minor < 10:
+    from importlib_metadata import entry_points
+else:
+    from importlib.metadata import entry_points
 
 
 logger = logging.getLogger(__name__)
