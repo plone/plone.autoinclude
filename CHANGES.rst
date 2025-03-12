@@ -9,6 +9,15 @@ Changelog
 
 .. towncrier release notes start
 
+2.0.2 (2025-03-12)
+------------------
+
+Bug fixes:
+
+
+- If a distribution is not found, try to normalize the name like recent setuptools is doing and try again [ale-rt] (#32)
+
+
 2.0.1 (2025-03-07)
 ------------------
 

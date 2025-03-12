@@ -1,1 +1,0 @@
-If a distribution is not found, try to normalize the name like recent setuptools is doing and try again [ale-rt]
