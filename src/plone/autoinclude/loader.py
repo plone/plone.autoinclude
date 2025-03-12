@@ -55,7 +55,7 @@ def _get_module_name_from_project_name(project_name):
         dist = distribution(project_name)
     except PackageNotFoundError:
         # Recent setuptools versions normalize the project name
-        # replacing `-_.` with dashes.
+        # replacing `-_.` with dashes and then underscores.
         #
         # Before giving up, we try to do the same exact thing, see:
         # https://github.com/pypa/setuptools/blob/84b7b2a2f6eaf992aad6b5af923fa3f48ae7b566/setuptools/_vendor/importlib_metadata/__init__.py#L835-L839C16  # noqa: E501
