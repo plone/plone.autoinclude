@@ -1,5 +1,6 @@
 from importlib.metadata import distribution
 from importlib.metadata import distributions
+from importlib.metadata import PackageNotFoundError
 from importlib.resources import files
 from zope.configuration.xmlconfig import include
 from zope.configuration.xmlconfig import includeOverrides
@@ -7,6 +8,7 @@ from zope.configuration.xmlconfig import includeOverrides
 import importlib
 import logging
 import os
+import re
 import sys
 
 
@@ -49,7 +51,19 @@ def _get_module_name_from_project_name(project_name):
     This must be something we can import.  So we at least replace any dashes
     with underscores.
     """
-    dist = distribution(project_name)
+    try:
+        dist = distribution(project_name)
+    except PackageNotFoundError:
+        # Recent setuptools versions normalize the project name
+        # replacing `-_.` with dashes.
+        #
+        # Before giving up, we try to do the same exact thing, see:
+        # https://github.com/pypa/setuptools/blob/84b7b2a2f6eaf992aad6b5af923fa3f48ae7b566/setuptools/_vendor/importlib_metadata/__init__.py#L835-L839C16  # noqa: E501
+        #
+        dist = distribution(
+            re.sub(r"[-_.]+", "-", project_name).lower().replace("-", "_")
+        )
+
     # In Python 3.9, dist.name does not exist, or maybe not always.
     if hasattr(dist, "name"):
         dist_name = dist.name
