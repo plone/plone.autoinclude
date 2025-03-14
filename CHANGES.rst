@@ -9,6 +9,16 @@ Changelog
 
 .. towncrier release notes start
 
+2.0.3 (2025-03-14)
+------------------
+
+Bug fixes:
+
+
+- Fix wheel compatibility with older versions of setuptools and buildout.
+  [maurits] (#34)
+
+
 2.0.2 (2025-03-12)
 ------------------
 
