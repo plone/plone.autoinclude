@@ -21,6 +21,7 @@ setup(
         "Framework :: Plone",
         "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
         "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
@@ -44,10 +45,12 @@ setup(
     package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
-    python_requires=">=3.9",
+    python_requires=">=3.8",
     install_requires=[
         "importlib-metadata; python_version<'3.10'",
+        "importlib-resources; python_version<'3.9'",
         "setuptools",
+        "setuptools <= 75.0; python_version<'3.9'",
         "zope.configuration",
     ],
 )

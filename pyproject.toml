@@ -1,5 +1,8 @@
 [build-system]
-requires = ["setuptools==75.8.0"]
+requires = [
+    "setuptools==75.8.0; python_version > '3.8'",
+    "setuptools==74.0.0; python_version == '3.8'"
+]
 
 [tool.towncrier]
 filename = "CHANGES.rst"
