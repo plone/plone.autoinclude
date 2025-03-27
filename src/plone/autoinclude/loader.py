@@ -1,7 +1,6 @@
 from importlib.metadata import distribution
 from importlib.metadata import distributions
 from importlib.metadata import PackageNotFoundError
-from importlib.resources import files
 from zope.configuration.xmlconfig import include
 from zope.configuration.xmlconfig import includeOverrides
 
@@ -16,6 +15,13 @@ if sys.version_info.major == 3 and sys.version_info.minor < 10:
     from importlib_metadata import entry_points
 else:
     from importlib.metadata import entry_points
+
+
+try:
+    from importlib.resources import files
+except ImportError:  # pragma: no cover
+    # Python 3.8
+    from importlib_resources import files
 
 
 logger = logging.getLogger(__name__)

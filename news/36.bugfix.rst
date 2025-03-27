@@ -1,0 +1,2 @@
+Restore support for Python 3.8.
+[ale-rt]
