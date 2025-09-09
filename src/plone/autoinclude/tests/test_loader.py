@@ -4,7 +4,6 @@ from setuptools.command.egg_info import egg_info
 
 import distutils.core
 import os
-import pkg_resources
 import sys
 import unittest
 
@@ -29,11 +28,9 @@ class TestLoader(unittest.TestCase):
         self._orig_ALLOW_MODULE_NOT_FOUND_ALL = loader.ALLOW_MODULE_NOT_FOUND_ALL
         loader.ALLOW_MODULE_NOT_FOUND_ALL = True
 
-        workingset = pkg_resources.working_set
         self.workingdir = os.getcwd()
         self.stored_syspath = copy(sys.path)
         test_packages = os.listdir(PROJECTS_DIR)
-        self.added_entries = []
         for package in test_packages:
             packagedir = os.path.join(PROJECTS_DIR, package)
             os.chdir(packagedir)
@@ -46,8 +43,6 @@ class TestLoader(unittest.TestCase):
                 pass
             ei.run()
             egginfodir = os.path.join(packagedir, "src")
-            workingset.add_entry(egginfodir)
-            self.added_entries.append(egginfodir)
             sys.path.append(egginfodir)
         os.chdir(self.workingdir)
 
@@ -59,9 +54,6 @@ class TestLoader(unittest.TestCase):
 
         os.chdir(self.workingdir)
         sys.path = self.stored_syspath
-        workingset = pkg_resources.working_set
-        for entry in self.added_entries:
-            workingset.entries.remove(entry)
 
     def test_load_z3c_packages(self):
         from plone.autoinclude.loader import load_z3c_packages
