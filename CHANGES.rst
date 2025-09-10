@@ -9,6 +9,24 @@ Changelog
 
 .. towncrier release notes start
 
+2.0.4 (2025-09-10)
+------------------
+
+Internal:
+
+
+- Build system: require ``setuptools  < 80``.  [maurits]
+
+
+Tests:
+
+
+- GitHub Actions: do not use a cache.  [maurits]
+- Remove ``pkg_resources`` from tests.  [maurits]
+- Test with latest ``zc.buildout`` 4.1.12, and run the buildout tests in GitHub Actions.
+  [maurits]
+
+
 2.0.3 (2025-03-14)
 ------------------
 

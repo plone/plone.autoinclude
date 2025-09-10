@@ -1,1 +1,0 @@
-Build system: require ``setuptools  < 80``.  [maurits]

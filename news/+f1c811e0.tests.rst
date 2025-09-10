@@ -1,2 +1,0 @@
-Test with latest ``zc.buildout`` 4.1.12, and run the buildout tests in GitHub Actions.
-[maurits]
