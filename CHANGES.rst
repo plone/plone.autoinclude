@@ -9,6 +9,17 @@ Changelog
 
 .. towncrier release notes start
 
+2.0.5 (2025-10-02)
+------------------
+
+Tests:
+
+
+- Fix tests with buildout 4, and add tests with buildout 5.
+  This is needed because we get more namespace packages.
+  [maurits]
+
+
 2.0.4 (2025-09-10)
 ------------------
 
