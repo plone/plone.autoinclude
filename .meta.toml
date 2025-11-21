@@ -1,15 +1,117 @@
 # Generated from:
-# https://github.com/zopefoundation/meta/tree/master/config/pure-python
+# https://github.com/plone/meta/tree/main/src/plone/meta/default
+# See the inline comments on how to expand/tweak this configuration file
 [meta]
-template = "pure-python"
-commit-id = "211d612c86d6754ebe13fad9b7081533bb603ed9"
+template = "default"
+commit-id = "2.2.2"
 
-[python]
-with-appveyor = false
-with-pypy = false
-with-legacy-python = false
-with-docs = false
-with-sphinx-doctests = false
+[github]
+jobs = [
+   "qa",
+   "coverage",
+   "release_ready",
+   "circular",
+]
 
-[coverage]
-fail-under = 50
+[tox]
+test_matrix = {"6.2" = ["*"]}
+envlist_lines = """
+    py{310,311,312,313}-{integration,unit}
+    buildout
+    buildout5
+"""
+
+config_lines = """
+[base-integration]
+# generic configuration for custom integration tests
+
+# example.ploneintegration depends on plone.autoinclude,
+# and 'deps' is handled before 'usedevelop', so we need '.' in the deps.
+# Also, we want all test packages in development mode,
+# otherwise when you make a change, you must recreate the environment.
+deps =
+    zope.testrunner
+    -e .
+    -e test-packages/example.basetestpackage
+    -e test-packages/example.addon
+    -e test-packages/example.different
+    -e test-packages/example.different2
+    -e test-packages/example.metaoverrides
+    -e test-packages/example.ploneaddon
+    -e test-packages/example.plone-dash-addon
+    -e test-packages/example.ploneintegration
+    -e test-packages/example.zopeaddon
+    -e test-packages/example.zopeintegration
+    -e test-packages/example.multipleeps
+    -e test-packages/ExampleCamelCase
+    -e test-packages/namespaceexample.native
+    -e test-packages/namespaceexample.pkgutilns
+# extras =
+#     test
+
+# Paths for integration tests: run only the tests of the test packages.
+# Do not run plone.autoinclude tests.
+integration_testpaths =
+# With --test-path=test-packages we find no tests.
+# Only paths to the src directories work.
+    --test-path=test-packages/example.addon/src
+    --test-path=test-packages/example.different/src
+    --test-path=test-packages/example.different2/src
+    --test-path=test-packages/example.metaoverrides/src
+    --test-path=test-packages/example.ploneaddon/src
+    --test-path=test-packages/example.ploneintegration/src
+    --test-path=test-packages/example.zopeaddon/src
+    --test-path=test-packages/example.zopeintegration/src
+    --test-path=test-packages/example.multipleeps/src
+    --test-path=test-packages/namespaceexample.native/src
+    --test-path=test-packages/namespaceexample.pkgutilns/src
+
+[testenv:py{39,310,311,312,313}-integration]
+# Integration tests: run only the tests of the test packages.
+# Do not run plone.autoinclude tests.
+usedevelop = false
+skip_install = true
+deps = {[base-integration]deps}
+commands =
+    zope-testrunner {[base-integration]integration_testpaths} []
+extras =
+    test
+
+[testenv:py{39,310,311,312,313}-unit]
+usedevelop = true
+skip_install = false
+deps =
+    zope.testrunner
+commands =
+    zope-testrunner --test-path=src
+extras =
+    test
+
+[testenv:buildout]
+basepython = python3
+skip_install = true
+deps =
+    pip == 25.2
+    setuptools == 80.9.0
+    zc.buildout == 4.1.12
+commands_pre =
+    python -m pip list
+    {envbindir}/buildout -nc {toxinidir}/buildout.cfg buildout:directory={envdir}
+commands =
+    {envbindir}/test-unit {posargs:-cv}
+    {envbindir}/test-integration {posargs:-cv}
+
+[testenv:buildout5]
+basepython = python3
+skip_install = true
+deps =
+    pip == 25.2
+    setuptools == 80.9.0
+    zc.buildout == 5.0.0a2
+commands_pre =
+    python -m pip list
+    {envbindir}/buildout -nc {toxinidir}/buildout5.cfg buildout:directory={envdir}
+commands =
+    {envbindir}/test-unit {posargs:-cv}
+    {envbindir}/test-integration {posargs:-cv}
+"""
