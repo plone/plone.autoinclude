@@ -1,6 +1,8 @@
 # Generated from:
 # https://github.com/zopefoundation/meta/tree/master/config/pure-python
-name: tests
+# plone.autoinclude has a really specific test setup, and can only really be
+# tested on its own, not on Jenkins in combination with other plone packages.
+name: Unit/integration
 
 on:
   push:
