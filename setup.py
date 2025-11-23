@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Installer for the plone.autoinclude package."""
 
 from setuptools import setup
