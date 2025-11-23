@@ -124,7 +124,7 @@ New features:
 Bug fixes:
 
 
-- Replace dash with lowdash in project_name, as Python Project are normally divided by dash and modul name uses lowdash [MrTango] (#16)
+- Replace dash with lowdash in project_name, as Python Project are normally divided by dash and module name uses lowdash [MrTango] (#16)
 
 
 1.0.0a3 (2021-12-03)
