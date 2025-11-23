@@ -66,7 +66,7 @@ class IntegrationTestCase:
         the part about overriding translations:
         https://github.com/mauritsvanrees/maurits.i18ntalk/blob/master/talk.rst#overriding-existing-translations
 
-        In this setUp method, we mimick this.
+        In this setUp method, we mimic this.
         We load meta.zcml of example.ploneintegration, and this gets the ball rolling:
 
         - It loads the meta.zcml of plone.autoinclude.

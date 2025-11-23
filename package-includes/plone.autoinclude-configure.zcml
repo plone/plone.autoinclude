@@ -1,4 +1,10 @@
 <configure xmlns="http://namespaces.zope.org/zope">
-  <include package="Products.CMFPlone" file="configure.zcml" />
-  <autoIncludePlugins target="plone" file="configure.zcml" />
+  <include
+      package="Products.CMFPlone"
+      file="configure.zcml"
+      />
+  <autoIncludePlugins
+      file="configure.zcml"
+      target="plone"
+      />
 </configure>

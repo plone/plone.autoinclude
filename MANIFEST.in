@@ -3,6 +3,7 @@
 include *.rst
 include *.txt
 include buildout.cfg
+include buildout5.cfg
 include LICENSE.GPL
 include tox.ini
 

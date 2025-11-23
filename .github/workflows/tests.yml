@@ -1,6 +1,8 @@
 # Generated from:
 # https://github.com/zopefoundation/meta/tree/master/config/pure-python
-name: tests
+# plone.autoinclude has a really specific test setup, and can only really be
+# tested on its own, not on Jenkins in combination with other plone packages.
+name: Unit/integration
 
 on:
   push:
@@ -19,17 +21,14 @@ jobs:
         config:
         # [Python version, tox env]
         - ["3.10", "lint", "ubuntu-latest"]
-        - ["3.9", "py39-unit", "ubuntu-latest"]
         - ["3.10", "py310-unit", "ubuntu-latest"]
         - ["3.11", "py311-unit", "ubuntu-latest"]
         - ["3.12", "py312-unit", "ubuntu-latest"]
         - ["3.13", "py313-unit", "ubuntu-latest"]
-        - ["3.9", "py39-integration", "ubuntu-latest"]
         - ["3.10", "py310-integration", "ubuntu-latest"]
         - ["3.11", "py311-integration", "ubuntu-latest"]
         - ["3.12", "py312-integration", "ubuntu-latest"]
         - ["3.13", "py313-integration", "ubuntu-latest"]
-        - ["3.9", "buildout", "ubuntu-latest"]
         - ["3.13", "buildout", "ubuntu-latest"]
         - ["3.13", "buildout5", "ubuntu-latest"]
         - ["3.10", "coverage", "ubuntu-latest"]

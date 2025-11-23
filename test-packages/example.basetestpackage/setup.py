@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from setuptools import find_packages
 from setuptools import setup
 
@@ -19,6 +18,6 @@ setup(
     install_requires=[
         "setuptools",
     ],
-    extras_require={"z3c": ["z3c.autoinclude"]}
+    extras_require={"z3c": ["z3c.autoinclude"]},
     # Note: no entry points here.
 )

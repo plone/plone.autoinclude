@@ -1,18 +1,19 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:meta="http://namespaces.zope.org/meta">
+    xmlns:meta="http://namespaces.zope.org/meta"
+    >
 
   <meta:directives namespace="http://namespaces.zope.org/zope">
 
     <meta:directive
         name="autoIncludePlugins"
-        schema=".zcml.IIncludePluginsDirective"
         handler=".zcml.includePluginsDirective"
+        schema=".zcml.IIncludePluginsDirective"
         />
     <meta:directive
         name="autoIncludePluginsOverrides"
-        schema=".zcml.IIncludePluginsDirective"
         handler=".zcml.includePluginsOverridesDirective"
+        schema=".zcml.IIncludePluginsDirective"
         />
 
   </meta:directives>
