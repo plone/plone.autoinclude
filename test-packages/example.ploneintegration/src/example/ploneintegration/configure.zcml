@@ -1,7 +1,9 @@
-<configure
-    xmlns="http://namespaces.zope.org/zope">
+<configure xmlns="http://namespaces.zope.org/zope">
 
-  <autoIncludePlugins target="plone" file="configure.zcml" />
+  <autoIncludePlugins
+      file="configure.zcml"
+      target="plone"
+      />
 
   <!-- FOR TESTS: This is configure.zcml from example.ploneintegration. -->
 

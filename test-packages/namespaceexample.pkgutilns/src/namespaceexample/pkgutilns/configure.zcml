@@ -3,7 +3,8 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
-    i18n_domain="namespaceexample.pkgutilns">
+    i18n_domain="namespaceexample.pkgutilns"
+    >
 
   <!--
     Be careful if you use general includeDependencies, it can have side effects!
