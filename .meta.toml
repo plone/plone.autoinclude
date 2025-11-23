@@ -3,7 +3,7 @@
 # See the inline comments on how to expand/tweak this configuration file
 [meta]
 template = "default"
-commit-id = "2.2.2"
+commit-id = "2.2.3.dev0"
 
 [github]
 jobs = [
@@ -54,16 +54,17 @@ deps =
 integration_testpaths =
 # With --test-path=test-packages we find no tests.
 # Only paths to the src directories work.
-    --test-path=test-packages/example.addon/src
-    --test-path=test-packages/example.different/src
-    --test-path=test-packages/example.different2/src
-    --test-path=test-packages/example.metaoverrides/src
-    --test-path=test-packages/example.ploneaddon/src
-    --test-path=test-packages/example.ploneintegration/src
-    --test-path=test-packages/example.zopeaddon/src
-    --test-path=test-packages/example.zopeintegration/src
-    --test-path=test-packages/example.multipleeps/src
-    --test-path=test-packages/namespaceexample.native/src
+# Also, we need everything on one line, so use a backslash at the end.
+    --test-path=test-packages/example.addon/src \
+    --test-path=test-packages/example.different/src \
+    --test-path=test-packages/example.different2/src \
+    --test-path=test-packages/example.metaoverrides/src \
+    --test-path=test-packages/example.ploneaddon/src \
+    --test-path=test-packages/example.ploneintegration/src \
+    --test-path=test-packages/example.zopeaddon/src \
+    --test-path=test-packages/example.zopeintegration/src \
+    --test-path=test-packages/example.multipleeps/src \
+    --test-path=test-packages/namespaceexample.native/src \
     --test-path=test-packages/namespaceexample.pkgutilns/src
 
 [testenv:py{39,310,311,312,313}-integration]
