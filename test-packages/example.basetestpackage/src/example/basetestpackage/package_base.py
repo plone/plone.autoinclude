@@ -65,8 +65,8 @@ class PackageTestCase:
 
     @unittest.skipIf(not HAS_PLONE_AUTOINCLUDE, "plone.autoinclude missing")
     def test_load_packages(self):
-        from plone.autoinclude.loader import load_packages
         from plone.autoinclude import loader
+        from plone.autoinclude.loader import load_packages
 
         # Empty the known module names, so projects are loaded again.
         loader._known_module_names = {}
