@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name="plone.autoinclude",
-    version="3.0.0a1",
+    version="3.0.0a2.dev0",
     description="Auto include code and zcml",
     # long_description: see metadata in setup.cfg
     # Get more from https://pypi.org/classifiers/
