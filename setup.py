@@ -38,7 +38,6 @@ setup(
     zip_safe=False,
     python_requires=">=3.10",
     install_requires=[
-        "importlib-metadata; python_version<'3.10'",
         "zope.configuration",
     ],
 )
