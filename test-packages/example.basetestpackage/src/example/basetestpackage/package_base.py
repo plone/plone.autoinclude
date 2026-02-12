@@ -1,20 +1,21 @@
 from .utils import allow_module_not_found_error
 from .utils import get_configuration_context
 from importlib import import_module
+from importlib.metadata import distribution
+from importlib.metadata import PackageNotFoundError
 
-import pkg_resources
 import unittest
 
 
 try:
-    pkg_resources.get_distribution("plone.autoinclude")
+    distribution("plone.autoinclude")
     HAS_PLONE_AUTOINCLUDE = True
-except pkg_resources.DistributionNotFound:
+except PackageNotFoundError:
     HAS_PLONE_AUTOINCLUDE = False
 try:
-    pkg_resources.get_distribution("z3c.autoinclude")
+    distribution("z3c.autoinclude")
     HAS_Z3C_AUTOINCLUDE = True
-except pkg_resources.DistributionNotFound:
+except PackageNotFoundError:
     HAS_Z3C_AUTOINCLUDE = False
 if HAS_PLONE_AUTOINCLUDE and HAS_Z3C_AUTOINCLUDE:
     raise ValueError(
