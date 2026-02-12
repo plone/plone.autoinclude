@@ -8,7 +8,6 @@ commit-id = "2.3.2.dev0"
 [github]
 jobs = [
    "qa",
-   "coverage",
    "release_ready",
    "circular",
 ]
