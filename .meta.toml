@@ -54,7 +54,7 @@ deps =
     -e test-packages/namespaceexample2.pkgresources
     -e test-packages/namespaceexample.pkgutilns
 
-[testenv:py{39,310,311,312,313,314}-integration]
+[testenv:py{310,311,312,313,314}-integration]
 # Integration tests: run only the tests of the test packages.
 # Do not run plone.autoinclude tests.
 usedevelop = false
@@ -68,7 +68,7 @@ commands =
 extras =
     test
 
-[testenv:py{39,310,311,312,313,314}-unit]
+[testenv:py{310,311,312,313,314}-unit]
 usedevelop = false
 skip_install = true
 deps = {[base-test]deps}
