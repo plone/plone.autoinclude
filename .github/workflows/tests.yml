@@ -25,12 +25,14 @@ jobs:
         - ["3.11", "py311-unit", "ubuntu-latest"]
         - ["3.12", "py312-unit", "ubuntu-latest"]
         - ["3.13", "py313-unit", "ubuntu-latest"]
+        - ["3.14", "py314-unit", "ubuntu-latest"]
         - ["3.10", "py310-integration", "ubuntu-latest"]
         - ["3.11", "py311-integration", "ubuntu-latest"]
         - ["3.12", "py312-integration", "ubuntu-latest"]
         - ["3.13", "py313-integration", "ubuntu-latest"]
+        - ["3.14", "py314-integration", "ubuntu-latest"]
         - ["3.13", "buildout", "ubuntu-latest"]
-        - ["3.13", "buildout5", "ubuntu-latest"]
+        - ["3.14", "buildout5", "ubuntu-latest"]
         - ["3.10", "coverage", "ubuntu-latest"]
 
     runs-on: ${{ matrix.config[2] }}

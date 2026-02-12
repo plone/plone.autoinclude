@@ -16,7 +16,7 @@ jobs = [
 [tox]
 test_matrix = {"6.2" = ["*"]}
 envlist_lines = """
-    py{310,311,312,313}-{integration,unit}
+    py{310,311,312,313,314}-{integration,unit}
     buildout
     buildout5
 """
@@ -53,7 +53,7 @@ deps =
     -e test-packages/namespaceexample.native
     -e test-packages/namespaceexample.pkgutilns
 
-[testenv:py{39,310,311,312,313}-integration]
+[testenv:py{39,310,311,312,313,314}-integration]
 # Integration tests: run only the tests of the test packages.
 # Do not run plone.autoinclude tests.
 usedevelop = false
@@ -67,7 +67,7 @@ commands =
 extras =
     test
 
-[testenv:py{39,310,311,312,313}-unit]
+[testenv:py{39,310,311,312,313,314}-unit]
 usedevelop = false
 skip_install = true
 deps = {[base-test]deps}
