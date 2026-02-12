@@ -4,7 +4,7 @@ import unittest
 
 
 class TestPackage(PackageTestCase, unittest.TestCase):
-    project_name = "namespaceexample.pkgresources"
+    project_name = "namespaceexample2.pkgresources"
     meta_files = []
     configure_files = ["configure.zcml", "permissions.zcml", "browser/configure.zcml"]
     overrides_files = []
