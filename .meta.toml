@@ -17,6 +17,7 @@ jobs = [
 test_matrix = {"6.2" = ["*"]}
 envlist_lines = """
     py{310,311,312,313,314}-{integration,unit}
+    owncoverage
     buildout
     buildout5
 """
@@ -76,6 +77,21 @@ commands =
     zope-testrunner --test-path=src
 extras =
     test
+
+[testenv:owncoverage]
+# Our setup is too different to use the standard coverage env from plone.meta.
+usedevelop = false
+skip_install = true
+deps =
+    {[base-test]deps}
+    coverage
+extras =
+    test
+commands =
+    coverage run --branch --source plone.autoinclude {envbindir}/zope-testrunner --test-path={toxinidir}/src -s plone.autoinclude {posargs}
+    coverage report -m --format markdown
+    coverage xml
+    coverage html
 
 [testenv:buildout]
 basepython = python3
