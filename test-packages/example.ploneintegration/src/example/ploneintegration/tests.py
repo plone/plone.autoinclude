@@ -34,6 +34,11 @@ class TestIntegration(IntegrationTestCase, unittest.TestCase):
             "permissions.zcml",
             "browser/configure.zcml",
         ],
+        "namespaceexample.pkgresources": [
+            "configure.zcml",
+            "permissions.zcml",
+            "browser/configure.zcml",
+        ],
         "namespaceexample.pkgutilns": [
             "configure.zcml",
             "permissions.zcml",
