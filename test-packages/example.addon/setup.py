@@ -1,4 +1,3 @@
-from setuptools import find_packages
 from setuptools import setup
 
 
@@ -10,14 +9,8 @@ setup(
     author="Maurits van Rees",
     author_email="m.van.rees@zestsoftware.nl",
     license="GPL version 2",
-    packages=find_packages("src", exclude=["ez_setup"]),
-    namespace_packages=["example"],
-    package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
-    install_requires=[
-        "setuptools",
-    ],
     # I want to try without setting a target in the entry point.
     # We could choose to say that when loading all zcml for a specific target,
     # we also load all zcml without a target.
