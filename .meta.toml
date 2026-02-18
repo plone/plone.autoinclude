@@ -3,27 +3,33 @@
 # See the inline comments on how to expand/tweak this configuration file
 [meta]
 template = "default"
-commit-id = "2.2.3.dev0"
+commit-id = "2.3.2.dev0"
 
 [github]
 jobs = [
    "qa",
-   "coverage",
    "release_ready",
    "circular",
 ]
 
 [tox]
-test_matrix = {"6.2" = ["*"]}
+use_test_matrix = false
 envlist_lines = """
-    py{310,311,312,313}-{integration,unit}
+    py{310,311,312,313,314}-{integration,unit}
+    owncoverage
     buildout
     buildout5
 """
 
 config_lines = """
-[base-integration]
-# generic configuration for custom integration tests
+[base-test]
+# generic configuration for custom integration and unit tests
+# For a long time this was only for integration tests.
+# But this required arcane incantations in test_loader.py, calling egg_info
+# and distutils.core from setuptools, which could lead to the egg_info dirs
+# being created next to setup.py instead of in the src directory.
+# Result: py312-unit on its own would fail, but it would pass if you
+# first called py312-integration.  So use this for both types of test.
 
 # example.ploneintegration depends on plone.autoinclude,
 # and 'deps' is handled before 'usedevelop', so we need '.' in the deps.
@@ -45,48 +51,46 @@ deps =
     -e test-packages/example.multipleeps
     -e test-packages/ExampleCamelCase
     -e test-packages/namespaceexample.native
+    -e test-packages/namespaceexample2.pkgresources
     -e test-packages/namespaceexample.pkgutilns
-# extras =
-#     test
 
-# Paths for integration tests: run only the tests of the test packages.
-# Do not run plone.autoinclude tests.
-integration_testpaths =
-# With --test-path=test-packages we find no tests.
-# Only paths to the src directories work.
-# Also, we need everything on one line, so use a backslash at the end.
-    --test-path=test-packages/example.addon/src \
-    --test-path=test-packages/example.different/src \
-    --test-path=test-packages/example.different2/src \
-    --test-path=test-packages/example.metaoverrides/src \
-    --test-path=test-packages/example.ploneaddon/src \
-    --test-path=test-packages/example.ploneintegration/src \
-    --test-path=test-packages/example.zopeaddon/src \
-    --test-path=test-packages/example.zopeintegration/src \
-    --test-path=test-packages/example.multipleeps/src \
-    --test-path=test-packages/namespaceexample.native/src \
-    --test-path=test-packages/namespaceexample.pkgutilns/src
-
-[testenv:py{39,310,311,312,313}-integration]
+[testenv:py{310,311,312,313,314}-integration]
 # Integration tests: run only the tests of the test packages.
 # Do not run plone.autoinclude tests.
 usedevelop = false
 skip_install = true
-deps = {[base-integration]deps}
+deps = {[base-test]deps}
+# With --test-path=test-packages we find no tests.
+# Only paths to the src directories work.
+# Also, we need everything on one line.
 commands =
-    zope-testrunner {[base-integration]integration_testpaths} []
+    zope-testrunner --test-path=test-packages/example.addon/src --test-path=test-packages/example.different/src --test-path=test-packages/example.different2/src --test-path=test-packages/example.metaoverrides/src --test-path=test-packages/example.ploneaddon/src --test-path=test-packages/example.ploneintegration/src --test-path=test-packages/example.zopeaddon/src --test-path=test-packages/example.zopeintegration/src --test-path=test-packages/example.multipleeps/src --test-path=test-packages/namespaceexample.native/src --test-path=test-packages/namespaceexample2.pkgresources/src --test-path=test-packages/namespaceexample.pkgutilns/src []
 extras =
     test
 
-[testenv:py{39,310,311,312,313}-unit]
-usedevelop = true
-skip_install = false
-deps =
-    zope.testrunner
+[testenv:py{310,311,312,313,314}-unit]
+usedevelop = false
+skip_install = true
+deps = {[base-test]deps}
 commands =
     zope-testrunner --test-path=src
 extras =
     test
+
+[testenv:owncoverage]
+# Our setup is too different to use the standard coverage env from plone.meta.
+usedevelop = false
+skip_install = true
+deps =
+    {[base-test]deps}
+    coverage
+extras =
+    test
+commands =
+    coverage run --branch --source plone.autoinclude {envbindir}/zope-testrunner --test-path={toxinidir}/src -s plone.autoinclude {posargs}
+    coverage report -m --format markdown
+    coverage xml
+    coverage html
 
 [testenv:buildout]
 basepython = python3
@@ -106,9 +110,9 @@ commands =
 basepython = python3
 skip_install = true
 deps =
-    pip == 25.3
-    setuptools == 80.9.0
-    zc.buildout == 5.1.0
+    pip == 26.0.1
+    setuptools == 81.0.0
+    zc.buildout == 5.1.2
 commands_pre =
     python -m pip list
     {envbindir}/buildout -nc {toxinidir}/buildout5.cfg buildout:directory={envdir}

@@ -21,6 +21,7 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python",
     ],
@@ -38,7 +39,6 @@ setup(
     zip_safe=False,
     python_requires=">=3.10",
     install_requires=[
-        "importlib-metadata; python_version<'3.10'",
         "zope.configuration",
     ],
 )

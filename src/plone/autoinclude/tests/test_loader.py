@@ -1,10 +1,6 @@
 from .utils import get_configuration_context
-from copy import copy
-from setuptools.command.egg_info import egg_info
 
-import distutils.core
 import os
-import sys
 import unittest
 
 
@@ -17,7 +13,6 @@ while test_dir not in os.listdir(directory):
         # reached root folder
         raise ValueError(f"Directory {test_dir} not found.")  # pragma: no cover
     directory = parent
-PROJECTS_DIR = os.path.realpath(os.path.join(directory, test_dir))
 
 
 class TestLoader(unittest.TestCase):
@@ -28,32 +23,11 @@ class TestLoader(unittest.TestCase):
         self._orig_ALLOW_MODULE_NOT_FOUND_ALL = loader.ALLOW_MODULE_NOT_FOUND_ALL
         loader.ALLOW_MODULE_NOT_FOUND_ALL = True
 
-        self.workingdir = os.getcwd()
-        self.stored_syspath = copy(sys.path)
-        test_packages = os.listdir(PROJECTS_DIR)
-        for package in test_packages:
-            packagedir = os.path.join(PROJECTS_DIR, package)
-            os.chdir(packagedir)
-            dist = distutils.core.run_setup("setup.py")
-            ei = egg_info(dist)
-            ei.finalize_options()
-            try:
-                os.mkdir(ei.egg_info)
-            except FileExistsError:
-                pass
-            ei.run()
-            egginfodir = os.path.join(packagedir, "src")
-            sys.path.append(egginfodir)
-        os.chdir(self.workingdir)
-
     def tearDown(self):
         from plone.autoinclude import loader
 
         # Restore original setting.
         loader.ALLOW_MODULE_NOT_FOUND_ALL = self._orig_ALLOW_MODULE_NOT_FOUND_ALL
-
-        os.chdir(self.workingdir)
-        sys.path = self.stored_syspath
 
     def test_load_z3c_packages(self):
         from plone.autoinclude.loader import load_z3c_packages
