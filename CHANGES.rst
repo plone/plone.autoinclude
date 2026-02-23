@@ -9,6 +9,25 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.0a2 (2026-02-23)
+--------------------
+
+Internal:
+
+
+- Update configuration files.
+  [plone devs]
+
+
+Tests:
+
+
+- Fix tests now that ``setuptools`` 82 is out.
+  Change most test packages to use native namespaces.
+  Still test with one with `pkg_resources` (with `setuptools<82` as `build-system`) and one with `pkgutil` style namespaces.
+  [mauritsvanrees]
+
+
 3.0.0a1 (2025-11-26)
 --------------------
 

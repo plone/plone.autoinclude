@@ -1,4 +1,0 @@
-Fix tests now that ``setuptools`` 82 is out.
-Change most test packages to use native namespaces.
-Still test with one with `pkg_resources` (with `setuptools<82` as `build-system`) and one with `pkgutil` style namespaces.
-[mauritsvanrees]
