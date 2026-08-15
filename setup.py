@@ -1,44 +1,4 @@
-"""Installer for the plone.autoinclude package."""
-
 from setuptools import setup
 
-
-setup(
-    name="plone.autoinclude",
-    version="3.0.1.dev0",
-    description="Auto include code and zcml",
-    # long_description: see metadata in setup.cfg
-    # Get more from https://pypi.org/classifiers/
-    classifiers=[
-        "Development Status :: 5 - Production/Stable",
-        "Environment :: Web Environment",
-        "Framework :: Plone :: 6.2",
-        "Framework :: Plone :: Core",
-        "Framework :: Plone",
-        "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
-        "Operating System :: OS Independent",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
-        "Programming Language :: Python :: 3.13",
-        "Programming Language :: Python :: 3.14",
-        "Programming Language :: Python :: Implementation :: CPython",
-        "Programming Language :: Python",
-    ],
-    keywords="Python Plone CMS",
-    author="Maurits van Rees",
-    author_email="maurits@vanrees.org",
-    url="https://github.com/collective/plone.autoinclude",
-    project_urls={
-        "PyPI": "https://pypi.org/project/plone.autoinclude/",
-        "Source": "https://github.com/plone/plone.autoinclude",
-        "Tracker": "https://github.com/plone/plone.autoinclude/issues",
-    },
-    license="GPL version 2",
-    include_package_data=True,
-    zip_safe=False,
-    python_requires=">=3.10",
-    install_requires=[
-        "zope.configuration",
-    ],
-)
+# See pyproject.toml for package metadata
+setup()
