@@ -10,7 +10,7 @@ requires = ["setuptools>=68.2,<80", "wheel"]
 
 [project]
 name = "plone.autoinclude"
-version = "3.0.1"
+version = "3.0.2.dev0"
 description = "Auto include code and zcml"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
